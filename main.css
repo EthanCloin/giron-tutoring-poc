@@ -1,0 +1,15 @@
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.calendars-wrapper {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.intro-text {
+  width: 60vw;
+  text-align: center;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=
+    , initial-scale=1.0"
+    />
+    <link href="main.css" rel="stylesheet" type="text/css" />
+    <title>Sample Site</title>
+  </head>
+  <body>
+    <main>
+      <div class="intro-text">
+        <h1>Imagine that this were a nice website</h1>
+        <p>We might even have colors and styles!</p>
+        <p>
+          But for now we are looking just add the embedded Google Calendar
+          Appointment Scheduling
+        </p>
+      </div>
+      <div class="calendars-wrapper">
+        <div class="google-wrapper">
+          <h1>Google Embed</h1>
+          <!-- Google Calendar Appointment Scheduling begin -->
+          <link
+            href="https://calendar.google.com/calendar/scheduling-button-script.css"
+            rel="stylesheet"
+          />
+          <script
+            src="https://calendar.google.com/calendar/scheduling-button-script.js"
+            async
+          ></script>
+          <script>
+            (function () {
+              var target = document.currentScript;
+              window.addEventListener("load", function () {
+                calendar.schedulingButton.load({
+                  url: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ29WIeVaOFMseYxtzdzB4mn6qawVxrntwKBPASVbXctSXKjwTaeWWF-a5E3-q_ShdAReekRffDw?gv=true",
+                  color: "#039BE5",
+                  label: "Book an appointment",
+                  target,
+                });
+              });
+            })();
+          </script>
+          <!-- end Google Calendar Appointment Scheduling -->
+        </div>
+        <div class="smart-wrapper">
+          <h1>Web Component</h1>
+          <!-- Smart Calendar web component begin -->
+          <script
+            type="module"
+            src="node_modules/smart-webcomponents/source/modules/smart.calendar.js"
+          ></script>
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="node_modules/smart-webcomponents/source/styles/smart.default.css"
+          />
+          <smart-calendar id="calendar"></smart-calendar>
+          <script>
+            const APP_STATE = {
+              selectedDate: new Date(),
+            };
+            console.log(`initial app state: ${JSON.stringify(APP_STATE)}`);
+            const calendar = document.getElementById("calendar");
+            calendar.addEventListener("change", (event) => {
+              console.log(event);
+              APP_STATE["selectedDate"] = new Date(event.detail.value);
+            });
+          </script>
+          <!-- end Smart Calendar web component -->
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
