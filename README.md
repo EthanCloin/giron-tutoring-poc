@@ -1,8 +1,35 @@
 # Summary
+
 minimal website to demonstrate options for tutoring booking
 
-## Smart Calendar opensource webcomponent
-Here are some relevant doc links for our use case:
+run with VSCode Live Server extension or preferred httpserver
 
-https://www.htmlelements.com/demos/calendar/restricted-dates/
-https://www.htmlelements.com/demos/calendar/events/
+## Google Calendar Appointment Scheduling Embed
+
+everything you need except payments, direct integration by Google with Google Calendar
+
+$10/month for multiple booking schedules
+
+## Smart Calendar opensource webcomponent
+
+Using the smart calendar means essentially rebuilding the Google embed ourselves.
+Upfront development cost and reduced feature set to avoid subscription lockin.
+
+### Required Custom Logic
+
+Database
+
+- Tutor Availability
+
+Client
+
+- Request Tutor Availability for some time period
+- Lookup Tutor Availability by Day
+- Form to request Booking
+- Manage state like `selectedDate` and `selectedTutor` to affect rendered content
+
+Server
+
+- CRUD operations on Tutor Availability
+- Calendar integration
+- Google Meet integration
