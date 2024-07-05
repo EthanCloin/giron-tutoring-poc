@@ -1,13 +1,14 @@
 from flask import Flask, render_template, request
-import database as db
+import database
 
 app = Flask(__name__)
 app.secret_key = b"ooh what a secure key we have secretly here in version control"
-db.init_app(app)
+database.init_app(app)
 
 
 @app.route("/")
 def home():
+    db = database.init_db()
     return render_template("google-vs-custom.html", request={"request": request})
 
 
