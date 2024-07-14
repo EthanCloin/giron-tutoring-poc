@@ -13,13 +13,15 @@ CREATE TABLE Clients (
     Email TEXT,
     Phone TEXT
 );
-DROP TABLE IF EXISTS Availability;
-CREATE TABLE Availability (
+DROP TABLE IF EXISTS TutorAvailability;
+CREATE TABLE TutorAvailability (
     AvailabilityID INTEGER PRIMARY KEY,
+    TutorID INTEGER,
     -- maybe add constraint to keep the int value between 0-6
     DayUTC INTEGER NOT NULL,
     TimeUTC INTEGER NOT NULL,
-    OverrideDateISO TEXT DEFAULT NULL
+    OverrideDateUTC TEXT DEFAULT NULL,
+    FOREIGN KEY(TutorID) REFERENCES Tutors(TutorID)
 );
 DROP TABLE IF EXISTS Bookings;
 CREATE TABLE Bookings (
@@ -28,7 +30,8 @@ CREATE TABLE Bookings (
     ClientID INTEGER,
     TutorID INTEGER,
     -- unclear if cascade is appropriate here
-    FOREIGN KEY(AvailabilityID) REFERENCES Products(AvailabilityID), -- ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(AvailabilityID) REFERENCES Products(AvailabilityID),
+    -- ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(ClientID) REFERENCES Clients(ClientID),
     FOREIGN KEY(TutorID) REFERENCES Tutors(TutorID)
 );

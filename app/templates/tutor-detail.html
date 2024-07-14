@@ -1,0 +1,14 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="main-contents">
+  <h1>tutor name</h1>
+  <p>here are some tutor details</p>
+  <button
+    hx-get="/tutors/{{ tutor_id or 1}}/availability"
+    hx-push-url="true"
+    hx-target=".main-contents"
+    hx-swap="innerHTML"
+  >
+    Book Now!
+  </button>
+</div>
+{% endblock %}

@@ -2,8 +2,13 @@
 
 minimal website to demonstrate options for tutoring booking
 
-~~run with VSCode Live Server extension or preferred httpserver~~
-run the app.py file via VSCode or CLI using `flask run`
+## Quickstart
+run the app.py file via CLI using 
+```bash 
+flask --app app init-db # *
+flask --app app run --debug
+```
+*\*init-db command only needs run on intial setup, or if you want to reset the db contents*
 
 ## Google Calendar Appointment Scheduling Embed
 
@@ -20,21 +25,19 @@ I am pulling the specific files i need out of node_modules and putting them into
 for the flask server! this addressed a problem where the calendar disappeared after including the flask server
 layer and as a side effect should decrease the size of the relevant js bundle
 
-### Required Custom Logic
+# Reference
+## flask docs
+- https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
+## time stuff
+- https://agileappscloud.info/aawiki/UTC_Format
+- https://www.worldtimebuddy.com/est-to-utc-converter
 
-Database
-
-- Tutor Availability
-
-Client
-
-- Request Tutor Availability for some time period
-- Lookup Tutor Availability by Day
-- Form to request Booking
-- Manage state like `selectedDate` and `selectedTutor` to affect rendered content
-
-Server
-
-- CRUD operations on Tutor Availability
-- Calendar integration
-- Google Meet integration
+| UTC Day   | Number |
+| --------- | ------ |
+| Sunday    | 0      |
+| Monday    | 1      |
+| Tuesday   | 2      |
+| Wednesday | 3      |
+| Thursday  | 4      |
+| Friday    | 5      |
+| Saturday  | 6      |

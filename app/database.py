@@ -17,7 +17,7 @@ def get_db():
 def init_db():
     db = get_db()
 
-    with current_app.open_resource("static/sql/schema.sql") as f:
+    with current_app.open_resource("static/sql/build-fresh-schema.sql") as f:
         db.executescript(f.read().decode("utf8"))
 
 
