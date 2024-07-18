@@ -19,8 +19,9 @@ CREATE TABLE TutorAvailability (
     TutorID INTEGER,
     -- maybe add constraint to keep the int value between 0-6
     DayUTC INTEGER NOT NULL,
-    TimeUTC INTEGER NOT NULL,
-    OverrideDateUTC TEXT DEFAULT NULL,
+    -- HH:MM
+    TimeUTC TEXT NOT NULL,
+    OverrideDatetimeUTC DATETIME DEFAULT NULL,
     FOREIGN KEY(TutorID) REFERENCES Tutors(TutorID)
 );
 DROP TABLE IF EXISTS Bookings;
