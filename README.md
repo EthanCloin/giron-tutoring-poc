@@ -28,6 +28,8 @@ layer and as a side effect should decrease the size of the relevant js bundle
 # Reference
 ## flask docs
 - https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
+- https://jinja.palletsprojects.com/en/3.0.x/templates/
+- 
 ## time stuff
 - https://agileappscloud.info/aawiki/UTC_Format
 - https://www.worldtimebuddy.com/est-to-utc-converter
@@ -41,3 +43,5 @@ layer and as a side effect should decrease the size of the relevant js bundle
 | Thursday  | 4      |
 | Friday    | 5      |
 | Saturday  | 6      |
+## calendar stuff
+- https://en.wikipedia.org/wiki/ICalendar

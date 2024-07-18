@@ -1,7 +1,7 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="main-contents">
   <h1>tutor name</h1>
-  <p>here are some tutor details</p>
+  <p>here is my availability</p>
   <button
     hx-get="/tutors/{{ tutor_id or 1}}/availability"
     hx-push-url="true"
