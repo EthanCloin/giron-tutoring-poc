@@ -15,7 +15,7 @@ CREATE TABLE Clients (
 );
 DROP TABLE IF EXISTS TutorAvailability;
 CREATE TABLE TutorAvailability (
-    AvailabilityID INTEGER PRIMARY KEY,
+    TutorAvailabilityID INTEGER PRIMARY KEY,
     TutorID INTEGER,
     -- maybe add constraint to keep the int value between 0-6
     DayUTC INTEGER NOT NULL,
@@ -27,11 +27,11 @@ CREATE TABLE TutorAvailability (
 DROP TABLE IF EXISTS Bookings;
 CREATE TABLE Bookings (
     BookingID INTEGER PRIMARY KEY,
-    AvailabilityID INTEGER,
+    TutorAvailabilityID INTEGER,
     ClientID INTEGER,
     TutorID INTEGER,
     -- unclear if cascade is appropriate here
-    FOREIGN KEY(AvailabilityID) REFERENCES Products(AvailabilityID),
+    FOREIGN KEY(TutorAvailabilityID) REFERENCES Products(TutorAvailabilityID),
     -- ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(ClientID) REFERENCES Clients(ClientID),
     FOREIGN KEY(TutorID) REFERENCES Tutors(TutorID)

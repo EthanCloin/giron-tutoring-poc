@@ -1,22 +1,13 @@
-<div>
-  <div class="smart-wrapper">
-    <h1>Select a Day</h1>
-    <!-- Smart Calendar web component begin -->
-    <smart-calendar id="calendar"></smart-calendar>
-    <script>
-      const APP_STATE = {
-        selectedDate: new Date(),
-      };
-      console.log(`initial app state: ${JSON.stringify(APP_STATE)}`);
-      const calendar = document.getElementById("calendar");
-      calendar.addEventListener("change", (event) => {
-        console.log(event);
-        APP_STATE["selectedDate"] = new Date(event.detail.value);
-      });
-    </script>
-    <!-- end Smart Calendar web component -->
-    <script>
-      console.log(APP_STATE);
-    </script>
-  </div>
+<link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
+<div class="calendar-wrapper">
+  <h1>Select a Day</h1>
+  <!-- Smart Calendar web component begin -->
+  <smart-calendar id="calendar" selection-mode="one" weeks="2"></smart-calendar>
+  <!-- end Smart Calendar web component -->
+  <script type="module" src="/static/js/smart.calendar.js"></script>
+  <script type="module">
+    import { determineRestrictedDates } from "/static/js/calendar-util.js";
+    const calendar = document.getElementById("calendar");
+    calendar.restrictedDates = determineRestrictedDates("{{ days_available }}");
+  </script>
 </div>

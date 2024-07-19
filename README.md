@@ -45,3 +45,4 @@ layer and as a side effect should decrease the size of the relevant js bundle
 | Saturday  | 6      |
 ## calendar stuff
 - https://en.wikipedia.org/wiki/ICalendar
+- https://www.htmlelements.com/docs/calendar-api
