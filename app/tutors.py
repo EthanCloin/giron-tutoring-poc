@@ -8,6 +8,7 @@ from flask import (
     session,
     url_for,
 )
+import json
 
 from app.database import get_db
 
@@ -48,9 +49,9 @@ def tutor_availability_view(tutor_id: int):
     """
     db = get_db()
     query = f"SELECT DayUTC, TimeUTC FROM TutorAvailability WHERE TutorID=? AND OverrideDatetimeUTC IS NULL"
-    availability = db.execute(query, (tutor_id,)).fetchall()
-    days_available = set(a["DayUTC"] for a in availability)
+    availability = [dict(r) for r in db.execute(query, (tutor_id,)).fetchall()]
 
+    days_available = set(a["DayUTC"] for a in availability)
     return render_template(
         "tutor-availability.html",
         availability=availability,

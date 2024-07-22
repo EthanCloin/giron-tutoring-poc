@@ -1,13 +1,40 @@
 <link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
 <div class="calendar-wrapper">
   <h1>Select a Day</h1>
-  <!-- Smart Calendar web component begin -->
-  <smart-calendar id="calendar" selection-mode="one" weeks="2"></smart-calendar>
-  <!-- end Smart Calendar web component -->
+  <!-- TODO: calendar styling preferences
+    only show current day and forward
+    disable nav to months in the past 
+    -->
+  <div class="booking-wrapper">
+    <smart-calendar
+      id="calendar"
+      selection-mode="one"
+      weeks="2"
+    ></smart-calendar>
+    <div class="time-slots">
+      <div class="time-slot time-slot__preceding">
+        <div class="time-slot"></div>
+      </div>
+      <div class="time-slot__selected-day"></div>
+      <div class="time-slot__next-day"></div>
+    </div>
+  </div>
+
   <script type="module" src="/static/js/smart.calendar.js"></script>
   <script type="module">
-    import { determineRestrictedDates } from "/static/js/calendar-util.js";
-    const calendar = document.getElementById("calendar");
-    calendar.restrictedDates = determineRestrictedDates("{{ days_available }}");
+    import {
+      createDefaultRestrictedDates,
+      createDefaultTimeSlots,
+    } from '/static/js/calendar-util.js';
+
+    const calendar = document.getElementById('calendar');
+    calendar.restrictedDates = createDefaultRestrictedDates(
+      '{{ days_available }}'
+    );
+    const formattedAvailability = JSON.parse(
+      '{{ availability | tojson | safe }}'
+    );
+    const timeSlots = createDefaultTimeSlots(formattedAvailability);
+    console.log('in template:', timeSlots);
   </script>
 </div>
