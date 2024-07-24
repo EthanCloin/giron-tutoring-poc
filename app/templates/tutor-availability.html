@@ -4,37 +4,56 @@
   <!-- TODO: calendar styling preferences
     only show current day and forward
     disable nav to months in the past 
+    disable swiping trackpad nav
     -->
-  <div class="booking-wrapper">
+  <div
+    class="booking-wrapper"
+    style="display: flex; width: 80vw; justify-content: space-between"
+  >
     <smart-calendar
       id="calendar"
       selection-mode="one"
       weeks="2"
     ></smart-calendar>
-    <div class="time-slots">
-      <div class="time-slot time-slot__preceding">
-        <div class="time-slot"></div>
-      </div>
-      <div class="time-slot__selected-day"></div>
-      <div class="time-slot__next-day"></div>
+    <div
+      class="time-slots"
+      style="display: flex; width: 80vw; justify-content: space-evenly"
+    >
+      <div class="time-slot time-slot__preceding" id="timeslot-previous"></div>
+      <div
+        class="time-slot time-slot__selected-day"
+        id="timeslot-selected"
+      ></div>
+      <div class="time-slot time-slot__next-day" id="timeslot-next"></div>
     </div>
   </div>
 
+  <template id="timeslot-card">
+    <p class="time-slot__time"></p>
+  </template>
+
   <script type="module" src="/static/js/smart.calendar.js"></script>
   <script type="module">
+    // update the calendar restricted dates and create timeslots
     import {
       createDefaultRestrictedDates,
       createDefaultTimeSlots,
+      getSelectedTimeSlots,
+      updateTimeSlots,
+      LOCALE_TIME_OPTIONS,
     } from '/static/js/calendar-util.js';
 
     const calendar = document.getElementById('calendar');
     calendar.restrictedDates = createDefaultRestrictedDates(
       '{{ days_available }}'
     );
-    const formattedAvailability = JSON.parse(
-      '{{ availability | tojson | safe }}'
+    const timeSlots = createDefaultTimeSlots(
+      JSON.parse('{{ availability | tojson | safe }}')
     );
-    const timeSlots = createDefaultTimeSlots(formattedAvailability);
-    console.log('in template:', timeSlots);
+    window.timeSlots = timeSlots;
+    calendar.addEventListener('change', updateTimeSlots);
+
+    // run it for current day so default timeslots appear
+    updateTimeSlots({ detail: { value: new Date() } });
   </script>
 </div>
