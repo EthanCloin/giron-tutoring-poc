@@ -13,10 +13,13 @@ const LOCALE_DATE_OPTIONS = {
   options: { month: '2-digit', day: '2-digit' },
 };
 
-export const LOCALE_TIME_OPTIONS = {
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: true,
+export const TIME_OPTIONS = {
+  locale: 'en-US',
+  options: {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  },
 };
 /**
  *
@@ -122,20 +125,28 @@ export const updateTimeSlots = (event) => {
   selectedTimeSlots.previous?.forEach((time) => {
     clone = timeslotTemplate.content.cloneNode(true);
     innerP = clone.querySelector('.time-slot__time');
-    innerP.textContent = time.toLocaleTimeString(LOCALE_TIME_OPTIONS) + 'prev';
+    innerP.textContent =
+      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options) +
+      'prev';
     previousDateElement.appendChild(clone);
   });
   selectedTimeSlots.selected?.forEach((time) => {
     clone = timeslotTemplate.content.cloneNode(true);
     innerP = clone.querySelector('.time-slot__time');
     innerP.textContent =
-      time.toLocaleTimeString(LOCALE_TIME_OPTIONS) + 'selected';
+      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options) +
+      'selected';
+    console.log(
+      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options)
+    );
     selectedDateElement.appendChild(clone);
   });
   selectedTimeSlots.next?.forEach((time) => {
     clone = timeslotTemplate.content.cloneNode(true);
     innerP = clone.querySelector('.time-slot__time');
-    innerP.textContent = time.toLocaleTimeString(LOCALE_TIME_OPTIONS) + 'next';
+    innerP.textContent =
+      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options) +
+      'next';
     nextDateElement.appendChild(clone);
   });
 };

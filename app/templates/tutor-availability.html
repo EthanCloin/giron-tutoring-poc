@@ -2,8 +2,6 @@
 <div class="calendar-wrapper">
   <h1>Select a Day</h1>
   <!-- TODO: calendar styling preferences
-    only show current day and forward
-    disable nav to months in the past 
     disable swiping trackpad nav
     -->
   <div
@@ -13,7 +11,7 @@
     <smart-calendar
       id="calendar"
       selection-mode="one"
-      weeks="2"
+      weeks="6"
     ></smart-calendar>
     <div
       class="time-slots"
@@ -40,20 +38,27 @@
       createDefaultTimeSlots,
       getSelectedTimeSlots,
       updateTimeSlots,
-      LOCALE_TIME_OPTIONS,
     } from '/static/js/calendar-util.js';
 
     const calendar = document.getElementById('calendar');
-    calendar.restrictedDates = createDefaultRestrictedDates(
-      '{{ days_available }}'
-    );
+
+    calendar.min = new Date();
+    const thirtyDaysAway = new Date();
+    thirtyDaysAway.setDate(new Date().getDate() + 30);
+    calendar.max = thirtyDaysAway;
+    calendar.restrictedDates = [
+      ...calendar.restrictedDates,
+      ...createDefaultRestrictedDates('{{ days_available }}'),
+    ];
+    calendar.hideOtherMonthDays = true;
     const timeSlots = createDefaultTimeSlots(
       JSON.parse('{{ availability | tojson | safe }}')
     );
     window.timeSlots = timeSlots;
     calendar.addEventListener('change', updateTimeSlots);
 
-    // run it for current day so default timeslots appear
-    updateTimeSlots({ detail: { value: new Date() } });
+    // refresh calendar
+    calendar.clearSelection();
+    calendar.today();
   </script>
 </div>
