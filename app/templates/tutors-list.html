@@ -1,5 +1,18 @@
-{% extends 'layout.html' %} {% block content %}
-<h1>herein lies a list of tutors</h1>
+{% extends 'layout.html' %} 
+
+{% block head %}
+<link href="/static/css/tutors.css" rel="stylesheet" />
+{% endblock %}
+
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="tutor-list-header">
+  <h1>herein lies a list of tutors</h1>
+  <p>Get ready to dive deep into the mysteries of the universe with a qualified Physics tutor on Giron.</p>
+</div>
 <div class="tutors-wrapper">
   <ol class="tutors-list">
     {% for tutor in tutors %}

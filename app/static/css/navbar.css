@@ -1,0 +1,49 @@
+header {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+
+.logo {
+    font-size: 2em;
+    color: var(--secondary-color);
+    user-select: none;
+}
+
+.navigation a {
+    position: relative;
+    font-size: 1.1em;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+}
+
+.navigation a:hover {
+    color: #0f1d6d;
+}
+
+.btnLogin {
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    margin-left: 20px;
+    background: var(--secondary-color);
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+.btnLogin:hover {
+    background: #0f1d6d;
+}
+
