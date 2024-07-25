@@ -31,20 +31,20 @@ header {
 }
 
 .btnLogin {
-    color: #000;
-    padding: 5px 10px;
+    color: #fff;
+    padding: 3px 15px;
     font-size: 1.2rem;
     border-radius: 8px;
     margin-left: 20px;
-    background: transparent;
-    border: 1px solid #000;
+    background: var(--secondary-color);
     cursor: pointer;
     outline: none;
     transition: 0.3s ease;
+    border: none;
 }
 
 .btnLogin:hover {
     color: #fff;
-    background: var(--secondary-color);
+    background: #0c43aa;
 }
 
