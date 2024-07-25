@@ -11,15 +11,15 @@ header {
 }
 
 .logo {
-    font-size: 2em;
-    color: var(--secondary-color);
+    width: 12%;
+    height: auto;
     user-select: none;
 }
 
 .navigation a {
     position: relative;
     font-size: 1.1em;
-    color: var(--secondary-color);
+    color: #000;
     text-decoration: none;
     font-weight: 500;
     margin-left: 20px;
@@ -27,23 +27,24 @@ header {
 }
 
 .navigation a:hover {
-    color: #0f1d6d;
+    color: var(--secondary-color);
 }
 
 .btnLogin {
-    color: #fff;
+    color: #000;
     padding: 5px 10px;
     font-size: 1.2rem;
     border-radius: 8px;
     margin-left: 20px;
-    background: var(--secondary-color);
+    background: transparent;
+    border: 1px solid #000;
     cursor: pointer;
-    border: none;
     outline: none;
     transition: 0.3s ease;
 }
 
 .btnLogin:hover {
-    background: #0f1d6d;
+    color: #fff;
+    background: var(--secondary-color);
 }
 

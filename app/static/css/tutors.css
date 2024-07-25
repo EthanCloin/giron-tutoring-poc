@@ -36,12 +36,12 @@
     min-width: 30%;
     min-height: auto;
     flex: 1;
-    border: 1px solid var(--primary-color);
+    border: 2px solid var(--primary-color);
     transition: border 0.3s ease;
 }
 
 .tutors-list__item-wrapper:hover {
-    border: 1px solid #000;
+    border: 2px solid #000;
 }
 
 .tutors-list__hyperlink {
