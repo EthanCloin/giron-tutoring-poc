@@ -17,8 +17,16 @@
         class="tutors-list__hyperlink"
         href="{{url_for('tutors.tutor_detail_view', tutor_id=tutor.TutorID)}}"
       >
-        <p class="tutors-list-item__id">{{tutor.TutorID}}</p>
-        <p class="tutors-list-item__name">{{tutor.Name}}</p>
+        <div class="tutors-list-item-image-col">
+          <img class="tutors-list-item__image" src="/static/images/Placeholder.jpg"/>
+        </div>
+        <div class="tutors-list-item-desc-col">
+          <!-- <p class="tutors-list-item__id">{{tutor.TutorID}}</p> -->
+          <h2 class="tutors-list-item__name">{{tutor.Name}}</h2>
+        </div>
+        <div class="tutors-list-item-booking-col">
+          <p>Book now!</p>
+        </div>
       </a>
     </li>
     {% endfor %}

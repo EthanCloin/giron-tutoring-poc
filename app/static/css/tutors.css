@@ -1,8 +1,19 @@
 .tutor-list-header {
+    position: relative;
     width: 100%;
     color: var(--secondary-color);
     font-size: 1.5rem;
     padding: 30px 25% 30px 25%;
+    margin-bottom: 30px;
+}
+
+.tutor-list-header::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    width: 50%;
+    height: 4px;
+    background: var(--secondary-color);
 }
 
 .tutor-list-header-heading {
@@ -11,7 +22,7 @@
 }
 
 .tutor-list-header-subheading {
-    color: #000;
+    color: var(--dark-color);
 }
 
 .tutors-wrapper {
@@ -41,21 +52,48 @@
 }
 
 .tutors-list__item-wrapper:hover {
-    border: 2px solid #000;
+    border: 2px solid var(--secondary-color);
 }
 
 .tutors-list__hyperlink {
     text-decoration: none;
     color: var(--secondary-color);
-    display: block;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 10px;
+    gap: 2%;
 }
 
-.tutors-list-item__id,
-.tutors-list-item__name {
+/*
+.tutors-list-item-image-col {
+   
+}
+*/
+
+.tutors-list-item__image {
+    width: 150px;
+    height: auto;
+    margin-bottom: 5%;
+    /* Temporary border for spacing */
+    border: 1px solid var(--dark-color);
+}
+
+.tutors-list-item-desc-col {
+    align-items: left;
+    flex: 1;
+}
+
+.tutors-list-item__id {
     font-size: 1em;
 }
 
 .tutors-list-item__name {
-    font-weight: bold;
-    margin-top: 5px;
+    font-weight: 550;
+    font-size: 1.5rem;
+    color: var(--dark-color);
+}
+
+.tutors-list-item-booking-col {
+    flex: 1;
+    text-align: right;
 }
