@@ -46,6 +46,10 @@
     border-radius: 4px;
     min-width: 30%;
     min-height: auto;
+    display: flex;
+    flex-direction: row;
+    padding: 20px 20px;
+    gap: 2%;
     flex: 1;
     border: 2px solid var(--primary-color);
     transition: border 0.3s ease;
@@ -55,14 +59,7 @@
     border: 2px solid var(--secondary-color);
 }
 
-.tutors-list__hyperlink {
-    text-decoration: none;
-    color: var(--secondary-color);
-    display: flex;
-    flex-direction: row;
-    padding: 10px 10px;
-    gap: 2%;
-}
+/* Col 1 */
 
 /*
 .tutors-list-item-image-col {
@@ -78,9 +75,14 @@
     border: 1px solid var(--dark-color);
 }
 
+/* Col 2 */
+
 .tutors-list-item-desc-col {
     align-items: left;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .tutors-list-item__id {
@@ -93,7 +95,65 @@
     color: var(--dark-color);
 }
 
+.bi-mortarboard-fill,
+.tutors-list-item-subjects {
+    color: #777373;
+    font-weight: 200;
+}
+
+.tutors-list-item-certs {
+    color: var(--dark-color);
+    font-weight: 600;
+}
+
+.tutors-list-item-bio {
+    font-weight: 100;
+}
+
+.read-more-btn {
+    color: var(--dark-color);
+    background: #fff;
+    border: none;
+    text-align: left;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    display: inline;
+    width: 77px;
+    margin-bottom: 2%;
+}
+
+.read-more-btn:hover {
+    color: var(--secondary-color);
+}
+
+/* Col 3 */
+
 .tutors-list-item-booking-col {
     flex: 1;
     text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.tutors-list__hyperlink {
+    color: #fff;
+    padding: 3px 15px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    margin-left: 20px;
+    margin-bottom: 2%;
+    background: var(--secondary-color);
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s ease;
+    border: none;
+}
+
+.tutors-list__hyperlink:hover {
+    color: #fff;
+    background: #0c43aa;
 }
