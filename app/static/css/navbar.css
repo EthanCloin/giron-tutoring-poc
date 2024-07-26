@@ -16,7 +16,7 @@ header {
     user-select: none;
 }
 
-.navigation a {
+.nav-util {
     position: relative;
     font-size: 1.1em;
     color: #000;
@@ -26,7 +26,7 @@ header {
     transition: color 0.3s ease;
 }
 
-.navigation a:hover {
+.nav-util:hover {
     color: var(--secondary-color);
 }
 

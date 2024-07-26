@@ -5,12 +5,12 @@
     padding: 30px 25% 30px 25%;
 }
 
-.tutor-list-header h1 {
+.tutor-list-header-heading {
     line-height: 1.2;
     font-weight: 600;
 }
 
-.tutor-list-header p {
+.tutor-list-header-subheading {
     color: #000;
 }
 
