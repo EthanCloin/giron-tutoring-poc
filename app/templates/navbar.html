@@ -1,14 +1,14 @@
 {% block head %}
-<link href="/static/css/navbar.css" rel="stylesheet" />
+    <link href="/static/css/navbar.css" rel="stylesheet" />
 {% endblock %}
 
 <header class="navbar">
-    <img class="logo" src="/static/images/nextStep-logo.png"/>
+    <img class="logo" src="/static/images/nextStep-logo.png" />
     <nav class="navigation">
-      <a class="nav-util" href="#">Home</a>
-      <a class="nav-util" href="#">About</a>
-      <a class="nav-util" href="#">Services</a>
-      <a class="nav-util" href="#">Contact</a>
-      <button class="btnLogin">Login</button>
+        <a class="nav-util" href="#">Home</a>
+        <a class="nav-util" href="#">About</a>
+        <a class="nav-util" href="{{ url_for('tutors.all_tutors_view') }}">Services</a>
+        <a class="nav-util" href="#">Contact</a>
+        <button class="btnLogin">Login</button>
     </nav>
-  </header>
+</header>
