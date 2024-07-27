@@ -12,6 +12,7 @@
 
 .logo {
     width: 12%;
+    min-width: 200px;
     height: auto;
     user-select: none;
 }
@@ -45,6 +46,6 @@
 
 .btnLogin:hover {
     color: #fff;
-    background: #0c43aa;
+    background: var(--dark-secondary-color);
 }
 

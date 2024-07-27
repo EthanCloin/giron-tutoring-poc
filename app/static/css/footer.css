@@ -1,0 +1,89 @@
+.footer {
+    margin-top: 100px;
+    position: relative;
+    background-image: url(../images/Teaching.webp);
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(67, 120, 190, 0.85);
+    z-index: 1;
+}
+
+.footer-wrapper {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    padding: 3% 2%;
+    position: relative;
+    z-index: 2;
+    gap: 100px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5%;
+}
+
+.footer-container {
+    margin-bottom: 8%;
+}
+
+.footer-header {
+    margin-bottom: 10%;
+    font-size: 1.8rem;
+}
+
+.footer-p {
+    color: #fff;
+    font-size: 20px;
+}
+
+.footer-icon-p {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.footer-util {
+    display: block;
+    text-decoration: none;
+}
+
+.footer-util:hover {
+    text-decoration: underline;
+}
+
+.footer-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20%;
+    flex: 1;
+}
+
+.r1::after {
+    content: '';
+    position: absolute;
+    bottom: 110px;
+    width: 70%;
+    height: 1px;
+    background: rgba(144, 180, 228, 0.85);
+}
+
+.footer-policies {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1%;
+}
