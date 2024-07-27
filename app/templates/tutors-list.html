@@ -1,16 +1,50 @@
-{% extends 'layout.html' %} {% block content %}
-<h1>herein lies a list of tutors</h1>
+{% extends 'layout.html' %} {% block head %}
+<link href="/static/css/tutors.css" rel="stylesheet" />
+<script src="/static/js/ui-util.js"></script>
+{% endblock %} {% block content %}
+<div class="tutor-list-header">
+  <h1 class="tutor-list-header-heading">herein lies a list of tutors</h1>
+  <p class="tutor-list-header-subheading">
+    Get ready to dive deep into the mysteries of the universe with a qualified
+    Physics tutor on Giron.
+  </p>
+</div>
 <div class="tutors-wrapper">
   <ol class="tutors-list">
     {% for tutor in tutors %}
     <li class="tutors-list__item-wrapper">
-      <a
-        class="tutors-list__hyperlink"
-        href="{{url_for('tutors.tutor_detail_view', tutor_id=tutor.TutorID)}}"
-      >
-        <p class="tutors-list-item__id">{{tutor.TutorID}}</p>
-        <p class="tutors-list-item__name">{{tutor.Name}}</p>
-      </a>
+      <div class="tutors-list-item-image-col">
+        <img
+          class="tutors-list-item__image"
+          src="{{ url_for('static', filename='images/Placeholder.jpg') }}"
+        />
+      </div>
+      <div class="tutors-list-item-desc-col">
+        <h2 class="tutors-list-item__name">{{tutor.Name}}</h2>
+        <p class="tutors-list-item-subjects">
+          {% include 'svg/grad-hat.html' %} Physics, Math, etc...
+        </p>
+        <p class="tutors-list-item-certs">
+          Degree from Harvard | 20 years research | 15 years tutoring experience
+          <span
+            class="tutors-list-item-bio"
+            data-full-text="— Hello my name is ___, I am a physicist, scientist and phd student. I have been teaching physics to schoolchildren and students since 2015. In my lessons, I try to adapt as much as possible to the level, needs and interests of the student."
+            >— Hello my name is ___, I am a physicist, scientist and phd
+            student. I have been teaching physics to schoolchildren and students
+            since 2015. In my lessons, I try to adapt as much as possible to the
+            level, needs and interests of the student.</span
+          >
+        </p>
+        <button class="read-more-btn">Read More</button>
+      </div>
+      <div class="tutors-list-item-booking-col">
+        <a
+          class="tutors-list__hyperlink"
+          href="{{ url_for('tutors.tutor_detail_view', tutor_id=tutor.TutorID)}}"
+        >
+          Book a session
+        </a>
+      </div>
     </li>
     {% endfor %}
   </ol>
