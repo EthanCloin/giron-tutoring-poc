@@ -28,11 +28,11 @@ DROP TABLE IF EXISTS Bookings;
 CREATE TABLE Bookings (
     BookingID INTEGER PRIMARY KEY,
     TutorAvailabilityID INTEGER,
-    ClientID INTEGER,
-    TutorID INTEGER,
+    ClientID INTEGER DEFAULT NULL,
+    TimeSlot DATETIME NOT NULL,
+    IsBooked INTEGER DEFAULT 0,
     -- unclear if cascade is appropriate here
     FOREIGN KEY(TutorAvailabilityID) REFERENCES Products(TutorAvailabilityID),
     -- ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(ClientID) REFERENCES Clients(ClientID),
-    FOREIGN KEY(TutorID) REFERENCES Tutors(TutorID)
+    FOREIGN KEY(ClientID) REFERENCES Clients(ClientID)
 );

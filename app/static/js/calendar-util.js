@@ -31,7 +31,6 @@ export const createDefaultRestrictedDates = (defaultAvailableDays) => {
   //  expecting tutorid=1 to have 9-5 M-F EST but it's S-Th now
   // OR maybe it's just looking wrong bc i'm allowing selection of days in the past
   const restrictedDates = [];
-
   for (let i = 0; i <= 30; i++) {
     const nextDay = new Date();
     nextDay.setUTCDate(nextDay.getUTCDate() + i);
@@ -136,9 +135,6 @@ export const updateTimeSlots = (event) => {
     innerP.textContent =
       time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options) +
       'selected';
-    console.log(
-      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options)
-    );
     selectedDateElement.appendChild(clone);
   });
   selectedTimeSlots.next?.forEach((time) => {
