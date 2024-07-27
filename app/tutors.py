@@ -1,15 +1,7 @@
 from flask import (
     Blueprint,
-    flash,
-    g,
-    redirect,
     render_template,
-    request,
-    session,
-    url_for,
 )
-import json
-
 from app.database import get_db
 
 bp = Blueprint("tutors", __name__, url_prefix="/tutors")
@@ -22,7 +14,6 @@ def all_tutors_view():
     db = get_db()
     query = "SELECT t.TutorID, t.Name FROM Tutors t"
     tutors = db.execute(query).fetchall()
-    print(tutors)
     return render_template("tutors-list.html", tutors=tutors)
 
 
@@ -50,7 +41,6 @@ def tutor_availability_view(tutor_id: int):
     db = get_db()
     query = f"SELECT DayUTC, TimeUTC FROM TutorAvailability WHERE TutorID=? AND OverrideDatetimeUTC IS NULL"
     availability = [dict(r) for r in db.execute(query, (tutor_id,)).fetchall()]
-
     days_available = set(a["DayUTC"] for a in availability)
     return render_template(
         "tutor-availability.html",
