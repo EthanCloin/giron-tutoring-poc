@@ -1,13 +1,79 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %} {% block head %}
+<link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
+
+{% endblock %} {% block content %}
 <div class="main-contents">
   <h1>{{tutor_name.title()}}</h1>
   <p>here is my availability</p>
-  <button
-    hx-get="{{ url_for('tutors.tutor_availability_view', tutor_id=tutor_id)}}"
-    hx-target="this"
-    hx-swap="outerHTML"
-  >
-    Book Now!
-  </button>
+  <div class="calendar-wrapper">
+    <h1>Select a Day</h1>
+    <!-- TODO: calendar styling preferences
+      disable swiping trackpad nav
+      -->
+    <div
+      class="booking-wrapper"
+      style="display: flex; width: 80vw; justify-content: space-between"
+    >
+      <smart-calendar
+        id="calendar"
+        selection-mode="one"
+        weeks="6"
+      ></smart-calendar>
+      <!-- TODO: add selectability to the timeslots
+       add styling for hover and click
+       add call to /tutors/booking/<booking_id> when confirm btn clicked -->
+      <div
+        class="time-slots"
+        style="display: flex; width: 80vw; justify-content: space-evenly"
+      >
+        <div
+          class="time-slot time-slot__preceding"
+          id="timeslot-previous"
+        ></div>
+        <div
+          class="time-slot time-slot__selected-day"
+          id="timeslot-selected"
+        ></div>
+        <div class="time-slot time-slot__next-day" id="timeslot-next"></div>
+      </div>
+      <button class="confirm-timeslot">Confirm</button>
+    </div>
+
+    <template id="timeslot-card">
+      <p class="time-slot__time"></p>
+    </template>
+    <script type="module" src="/static/js/smart.calendar.js"></script>
+    <script type="module" defer>
+      // update the calendar restricted dates and create timeslots
+      import {
+        createDefaultRestrictedDates,
+        createDefaultTimeSlots,
+        getSelectedTimeSlots,
+        updateTimeSlots,
+      } from '/static/js/calendar-util.js';
+
+      const calendar = document.getElementById('calendar');
+
+      calendar.min = new Date();
+      const thirtyDaysAway = new Date();
+      thirtyDaysAway.setDate(new Date().getDate() + 30);
+      calendar.max = thirtyDaysAway;
+      console.log(calendar.restrictedDates);
+      calendar.restrictedDates = [
+        ...calendar.restrictedDates,
+        ...createDefaultRestrictedDates('{{ days_available }}'),
+      ];
+      calendar.hideOtherMonthDays = true;
+      const timeSlots = createDefaultTimeSlots(
+        JSON.parse('{{ availability | tojson | safe }}')
+      );
+      window.timeSlots = timeSlots;
+      calendar.addEventListener('change', updateTimeSlots);
+
+      // refresh calendar
+      calendar.clearSelection();
+      calendar.today();
+    </script>
+  </div>
 </div>
 {% endblock %}

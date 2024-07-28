@@ -30,6 +30,7 @@ export const createDefaultRestrictedDates = (defaultAvailableDays) => {
   // TODO: determine how this is offsetting availability from database by a day
   //  expecting tutorid=1 to have 9-5 M-F EST but it's S-Th now
   // OR maybe it's just looking wrong bc i'm allowing selection of days in the past
+  console.log(defaultAvailableDays);
   const restrictedDates = [];
   for (let i = 0; i <= 30; i++) {
     const nextDay = new Date();
