@@ -106,7 +106,6 @@ export const updateTimeSlots = (event) => {
   const selectedDate = new Date(event.detail.value);
   const timeSlots = window.timeSlots;
   const selectedTimeSlots = getSelectedTimeSlots(selectedDate, timeSlots);
-
   // access the template to be cloned and other elements which hold the clones
   const timeslotTemplate = document.getElementById('timeslot-card');
   const previousDateElement = document.getElementById('timeslot-previous');

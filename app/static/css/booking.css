@@ -1,0 +1,79 @@
+/* .booking-modal {
+  width: 85vw;
+  height: 75vw;
+
+  .booking-form {
+    width: 95%;
+    height: 65%;
+  }
+}
+
+.modal-backdrop {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  opacity: 70%;
+  background-color: gray;
+} */
+
+/* Modal backdrop to cover the entire screen and grey out the background */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent black background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensure it is on top of other content */
+}
+
+/* Modal itself */
+.booking-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%; /* Adjust width as needed */
+  max-width: 800px; /* Ensure it doesn't get too wide on large screens */
+  max-height: 90%; /* Ensure it doesn't get too tall on small screens */
+  overflow-y: auto; /* Scroll if content overflows */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add some shadow for better appearance */
+}
+
+/* Example of additional styling */
+.booking__info,
+.booking-form {
+  margin-bottom: 20px;
+}
+
+.booking-form input {
+  display: block;
+  width: calc(100% - 20px); /* Adjust width to be responsive */
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.booking-form p {
+  cursor: pointer;
+  color: red;
+  text-align: center;
+}
+
+.booking-form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.booking-form button:hover {
+  background: #0056b3;
+}
