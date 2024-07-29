@@ -1,51 +1,50 @@
 .navbar {
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
-    padding: 20px 100px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 99;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  padding: 20px 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99;
 }
 
 .logo {
-    width: 12%;
-    min-width: 200px;
-    height: auto;
-    user-select: none;
+  width: 12%;
+  min-width: 200px;
+  height: auto;
+  user-select: none;
 }
 
 .nav-util {
-    position: relative;
-    font-size: 1.1em;
-    color: var(--dark-color);
-    text-decoration: none;
-    font-weight: 500;
-    margin-left: 20px;
-    transition: color 0.3s ease;
+  position: relative;
+  font-size: 1.1em;
+  color: var(--dark-color);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 20px;
+  transition: color 0.3s ease;
 }
 
 .nav-util:hover {
-    color: var(--secondary-color);
+  color: var(--secondary-color);
 }
 
 .btnLogin {
-    color: #fff;
-    padding: 3px 15px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    margin-left: 20px;
-    background: var(--secondary-color);
-    cursor: pointer;
-    outline: none;
-    transition: 0.3s ease;
-    border: none;
+  color: #fff;
+  padding: 3px 15px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  margin-left: 20px;
+  background: var(--secondary-color);
+  cursor: pointer;
+  outline: none;
+  transition: 0.3s ease;
+  border: none;
 }
 
 .btnLogin:hover {
-    color: #fff;
-    background: var(--dark-secondary-color);
+  color: #fff;
+  background: var(--dark-secondary-color);
 }
-
