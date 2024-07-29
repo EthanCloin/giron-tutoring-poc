@@ -1,0 +1,15 @@
+.booking-wrapper {
+  display: flex;
+  width: 80vw;
+  justify-content: space-between;
+}
+
+.time-slots {
+  display: flex;
+  width: 80vw;
+  justify-content: space-evenly;
+}
+
+#modal-placeholder {
+  display: none;
+}

@@ -1,13 +1,39 @@
-<section class="booking__info">
-  <p class="info__tutor-name">Book with {{ booking.TutorName }}</p>
-  <p class="info__booking-time">{{ booking.TimeSlot }}</p>
-</section>
-<p>Your Contact Info</p>
-<form id="booking-form">
-  <input required name="first-name" type="text" placeholder="First" />
-  <input required name="last-name" type="text" placeholder="Last" />
-  <input required name="email" type="text" placeholder="email" />
-  <div class="booking"></div>
-  <p onclick="document.getElementById('booking-form').remove()">Cancel</p>
-  <button type="submit">Submit</button>
-</form>
+<div id="booking-modal" class="modal-backdrop">
+  <div class="booking-modal">
+    <section class="booking__info">
+      <p class="info__tutor-name">Book with {{ booking.TutorName }}</p>
+      <p class="info__booking-time">{{ booking.TimeSlot }}</p>
+    </section>
+    <p>Your Contact Info</p>
+    <form class="booking-form">
+      <input required name="first-name" type="text" placeholder="First" />
+      <input required name="last-name" type="text" placeholder="Last" />
+      <input required name="email" type="text" placeholder="Email" />
+      <div class="booking"></div>
+      <button
+        onclick="document.getElementById('booking-modal').remove();history.back()"
+      >
+        Cancel
+      </button>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<!-- <div class="modal-backdrop">
+  <div class="booking-modal">
+    <section class="booking__info">
+      <p class="info__tutor-name">Book with {{ booking.TutorName }}</p>
+      <p class="info__booking-time">{{ booking.TimeSlot }}</p>
+    </section>
+    <p>Your Contact Info</p>
+    <form class="booking-form">
+      <input required name="first-name" type="text" placeholder="First" />
+      <input required name="last-name" type="text" placeholder="Last" />
+      <input required name="email" type="text" placeholder="email" />
+      <div class="booking"></div>
+      <p onclick="document.getElementById('booking-modal').remove()">Cancel</p>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div> -->
