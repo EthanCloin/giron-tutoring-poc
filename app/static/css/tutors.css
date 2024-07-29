@@ -98,7 +98,7 @@
 .bi-mortarboard-fill,
 .tutors-list-item-subjects {
   color: #777373;
-  font-weight: 200;
+  font-weight: 300;
 }
 
 .tutors-list-item-certs {
@@ -107,7 +107,7 @@
 }
 
 .tutors-list-item-bio {
-  font-weight: 100;
+  font-weight: 300;
 }
 
 .read-more-btn {
@@ -119,9 +119,8 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 16px;
-  display: inline;
-  width: 77px;
   margin-bottom: 2%;
+  align-self: flex-start;
 }
 
 .read-more-btn:hover {
