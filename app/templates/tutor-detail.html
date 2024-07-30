@@ -15,8 +15,21 @@
 {% endblock %} {% block content %}
 <div id="modal-placeholder"></div>
 <div class="main-contents">
-  <h1>{{tutor_name.title()}}</h1>
-  <p>here is my availability</p>
+  <div class="booking-tutor-wrapper">
+    <img
+      class="booking-tutor__image"
+      src="{{ url_for('static', filename='images/Placeholder.jpg') }}"
+    />
+    <div class="booking-tutor-info-container">
+      <h1 class="booking-tutor__title">{{tutor_name.title()}}</h1>
+      <p class="booking-tutor-bio">
+        Hello my name is ___, I am a physicist, scientist and phd student. I
+        have been teaching physics to schoolchildren and students since 2015. In
+        my lessons, I try to adapt as much as possible to the level, needs and
+        interests of the student.
+      </p>
+    </div>
+  </div>
   <div class="booking-wrapper">
     <smart-calendar
       id="calendar"

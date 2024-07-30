@@ -41,6 +41,7 @@
 .footer-header {
   margin-bottom: 10%;
   font-size: 1.8rem;
+  color: #fff;
 }
 
 .footer-p {
@@ -48,9 +49,14 @@
   font-size: 20px;
 }
 
+.footer-icon {
+  fill: #fff;
+}
+
 .footer-icon-p {
   font-weight: 500;
   font-size: 16px;
+  color: #fff;
 }
 
 .footer-util {

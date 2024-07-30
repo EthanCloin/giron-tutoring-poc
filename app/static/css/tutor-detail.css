@@ -13,3 +13,109 @@
 #modal-placeholder {
   display: none;
 }
+
+.main-contents {
+  display: flex;
+  flex-direction: column;
+  padding: 2% 5.4%;
+}
+
+/* Row 1 */
+.booking-tutor-wrapper {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  gap: 30px;
+  margin-bottom: 10%;
+}
+
+.booking-tutor-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  width: calc(50% + 230px);
+  height: 4px;
+  background: var(--secondary-color);
+}
+
+.booking-tutor__image {
+  width: 200px;
+  /* Temporary border for spacing */
+  border: 1px solid var(--dark-color);
+}
+
+.booking-tutor-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 50%;
+  gap: 4%;
+}
+/* Example CSS to style a calendar component */
+
+/* General calendar container */
+smart-calendar {
+  border: 1px solid #ccc; /* Add a border */
+  border-radius: 10px; /* Rounded corners */
+  overflow: hidden; /* Ensure content fits within the border */
+}
+
+/* Calendar header (e.g., month/year) */
+smart-calendar .header {
+  background-color: #f5f5f5; /* Light gray background */
+  color: #333; /* Dark text color */
+  padding: 10px; /* Add some padding */
+  font-weight: bold; /* Bold text */
+}
+
+/* Navigation buttons (previous/next month) */
+smart-calendar .nav-buttons {
+  display: flex; /* Flex container for buttons */
+  justify-content: space-between; /* Space out buttons */
+}
+
+smart-calendar .nav-buttons button {
+  background-color: #4378be; /* Primary color */
+  color: white; /* White text */
+  border: none; /* Remove default border */
+  padding: 5px 10px; /* Add padding */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+smart-calendar .nav-buttons button:hover {
+  background-color: #365a9a; /* Darker shade on hover */
+}
+
+/* Days of the week */
+smart-calendar .days-of-week {
+  background-color: #e0e0e0; /* Light gray background */
+  color: #555; /* Darker text color */
+  padding: 5px; /* Padding around day names */
+}
+
+/* Individual days */
+smart-calendar .day {
+  display: inline-block; /* Inline-block for days */
+  width: 2rem; /* Fixed width for days */
+  height: 2rem; /* Fixed height for days */
+  line-height: 2rem; /* Center text vertically */
+  text-align: center; /* Center text horizontally */
+  margin: 2px; /* Space between days */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+smart-calendar .day.selected {
+  background-color: #4378be; /* Primary color for selected day */
+  color: white; /* White text for selected day */
+}
+
+smart-calendar .day:hover {
+  background-color: #d0e0f0; /* Light blue background on hover */
+}
+
+/* Restricted dates or special markers */
+smart-calendar .day.restricted {
+  background-color: #f5f5f5; /* Gray background for restricted dates */
+  color: #999; /* Lighter text color */
+  text-decoration: line-through; /* Strikethrough for restricted dates */
+}
