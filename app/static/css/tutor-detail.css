@@ -4,12 +4,6 @@
   justify-content: space-between;
 }
 
-.time-slots {
-  display: flex;
-  width: 80vw;
-  justify-content: space-evenly;
-}
-
 #modal-placeholder {
   display: none;
 }
@@ -26,7 +20,7 @@
   position: relative;
   flex-direction: row;
   gap: 30px;
-  margin-bottom: 10%;
+  margin-bottom: 5%;
 }
 
 .booking-tutor-wrapper::after {
@@ -51,6 +45,63 @@
   width: 50%;
   gap: 4%;
 }
+
+/* Row 2 */
+
+.time-slots {
+  display: flex;
+  width: 80vw;
+  gap: 2%;
+}
+
+.time-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+  padding: 15px 30px;
+}
+
+.time-slot-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--primary-color);
+  padding: 5px 2px;
+  border-radius: 10px;
+}
+
+.time-slot-container-selected {
+  border: 2px solid var(--secondary-color);
+}
+
+.time-slot__time {
+  border-radius: 5px;
+  border: 1px solid var(--primary-color);
+  height: 50px;
+  background: #fff;
+  color: var(--secondary-color);
+  text-align: center;
+  padding: 5px 3px;
+  cursor: pointer;
+  transition: border 0.1s ease;
+  font-size: 16px;
+}
+
+.time-slot__time:hover {
+  border: 1px solid var(--dark-color);
+}
+
+.time-slot__time-toggled {
+  background: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  color: #fff;
+}
+
+.time-slot__time-toggled:hover {
+  border: 1px solid var(--secondary-color);
+}
+
 /* Example CSS to style a calendar component */
 
 /* General calendar container */
