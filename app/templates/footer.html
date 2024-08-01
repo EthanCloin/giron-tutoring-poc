@@ -1,0 +1,46 @@
+<footer class="footer">
+  <div class="footer-wrapper">
+    <div class="footer-row r1">
+      <div class="footer-col footer-contacts">
+        <h2 class="footer-header">Contact us</h2>
+        <div class="footer-container">
+          <p class="footer-icon-p">
+            {% include 'svg/location.html' %} Address:
+          </p>
+          <p class="footer-p">Jacksonville, Fl</p>
+        </div>
+        <div class="footer-container">
+          <p class="footer-icon-p">{% include 'svg/phone.html' %} Phone:</p>
+          <a class="footer-p footer-util" href="tel:+19046646398"
+            >+1 (904) 664-6398</a
+          >
+        </div>
+        <div class="footer-container">
+          <p class="footer-icon-p">{% include 'svg/email.html' %} Email:</p>
+          <a class="footer-p footer-util" href="mailto:info@nextstepss.com"
+            >info@nextstepess.com</a
+          >
+        </div>
+      </div>
+      <div class="footer-col footer-links">
+        <h2 class="footer-header">Quick links</h2>
+        <a class="footer-p footer-util" href="#">Home</a>
+        <a class="footer-p footer-util" href="#">About</a>
+        <a
+          class="footer-p footer-util"
+          href="{{ url_for('tutors.all_tutors_view') }}"
+          >Services</a
+        >
+        <a class="footer-p footer-util" href="#">Contact</a>
+        <a class="footer-p footer-util" href="#">Login</a>
+      </div>
+    </div>
+    <div class="footer-row r2">
+      <div class="footer-policies">
+        <a class="footer-p footer-util">Privacy Policy</a>
+        <p class="footer-p">|</p>
+        <a class="footer-p footer-util">Terms & Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>

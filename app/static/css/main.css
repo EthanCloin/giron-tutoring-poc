@@ -1,21 +1,25 @@
 :root {
   --primary-color: #b5bdc2;
-  --secondary-color: #4378be;
-  --dark-color: #202020f1
+  --secondary-color: rgb(67, 120, 190);
+  --dark-secondary-color: rgb(12, 67, 170);
+  --dark-color: #202020f1;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Poppins', 'Times New Roman', Times, serif;
+  color: var(--dark-color);
 }
 
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
 }
+
 .calendars-wrapper {
   display: flex;
   justify-content: space-around;

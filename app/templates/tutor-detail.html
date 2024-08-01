@@ -1,13 +1,127 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %} {% block head %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{ url_for('static', filename='css/tutor-detail.css')}}"
+/>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{ url_for('static', filename='css/booking.css')}}"
+/>
+
+{% endblock %} {% block content %}
+<div id="modal-placeholder"></div>
 <div class="main-contents">
-  <h1>{{tutor_name.title()}}</h1>
-  <p>here is my availability</p>
-  <button
-    hx-get="{{ url_for('tutors.tutor_availability_view', tutor_id=tutor_id)}}"
-    hx-target="this"
-    hx-swap="outerHTML"
-  >
-    Book Now!
-  </button>
+  <div class="booking-tutor-wrapper">
+    <img
+      class="booking-tutor__image"
+      src="{{ url_for('static', filename='images/Placeholder.jpg') }}"
+    />
+    <div class="booking-tutor-info-container">
+      <h1 class="booking-tutor__title">{{tutor_name.title()}}</h1>
+      <p class="booking-tutor-bio">
+        Hello my name is ___, I am a physicist, scientist and phd student. I
+        have been teaching physics to schoolchildren and students since 2015. In
+        my lessons, I try to adapt as much as possible to the level, needs and
+        interests of the student.
+      </p>
+    </div>
+  </div>
+  <div class="booking-wrapper">
+    <smart-calendar
+      id="calendar"
+      selection-mode="one"
+      weeks="6"
+    ></smart-calendar>
+    <div class="time-slots">
+      <div class="time-slot-container">
+        <div class="time-slot__date" data-day-type="previous"></div>
+        <div
+          class="time-slot time-slot__preceding"
+          id="timeslot-previous"
+        ></div>
+      </div>
+      <div class="time-slot-container time-slot-container-selected">
+        <div
+          class="time-slot__date time-slot__date-selected"
+          data-day-type="selected"
+        ></div>
+        <div
+          class="time-slot time-slot__selected-day"
+          id="timeslot-selected"
+        ></div>
+      </div>
+      <div class="time-slot-container">
+        <div class="time-slot__date" data-day-type="next"></div>
+        <div class="time-slot time-slot__next-day" id="timeslot-next"></div>
+      </div>
+    </div>
+    <button
+      hx-get="{{ url_for('tutors.submit_booking_view', booking_id=1)}}"
+      hx-push-url="true"
+      hx-target="#modal-placeholder"
+      hx-swap="outerHTML"
+    >
+      Book Now
+    </button>
+  </div>
+  <template id="timeslot-card">
+    <button class="time-slot__time" onclick="toggleTimeSlotBtn(event)"></button>
+  </template>
+  <script
+    type="module"
+    src="{{ url_for('static', filename='js/smart.calendar.js') }}"
+  ></script>
+  <script type="module">
+    // update the calendar restricted dates and create timeslots
+    import {
+      createDefaultRestrictedDates,
+      createDefaultTimeSlots,
+      getSelectedTimeSlots,
+      updateTimeSlots,
+    } from '/static/js/calendar-util.js';
+
+    const calendar = document.getElementById('calendar');
+    calendar.min = new Date();
+    const thirtyDaysAway = new Date();
+    thirtyDaysAway.setDate(new Date().getDate() + 30);
+    calendar.max = thirtyDaysAway;
+    calendar.restrictedDates = [
+      ...calendar.restrictedDates,
+      ...createDefaultRestrictedDates('{{ days_available }}'),
+    ];
+    calendar.hideOtherMonthDays = true;
+    const timeSlots = createDefaultTimeSlots(
+      JSON.parse('{{ availability | tojson | safe }}')
+    );
+
+    window.timeSlots = timeSlots;
+
+    calendar.addEventListener('change', updateTimeSlots);
+
+    // refresh calendar on initial load
+    if (calendar.selectedDates.length > 0) {
+      calendar.clearSelection();
+      calendar.today();
+    } else {
+      calendar.selectedDates = [calendar.min];
+      updateTimeSlots({ detail: { value: calendar.min.toISOString() } });
+    }
+
+    let prevBtn = null;
+    window.toggleTimeSlotBtn = function (event) {
+      const currBtn = event.target;
+      if (prevBtn && prevBtn !== currBtn) {
+        prevBtn.classList.remove('time-slot__time-toggled');
+      }
+      if (prevBtn !== currBtn) {
+        currBtn.classList.toggle('time-slot__time-toggled');
+      }
+      prevBtn = currBtn;
+    };
+  </script>
 </div>
 {% endblock %}

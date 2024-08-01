@@ -106,12 +106,31 @@ export const updateTimeSlots = (event) => {
   const selectedDate = new Date(event.detail.value);
   const timeSlots = window.timeSlots;
   const selectedTimeSlots = getSelectedTimeSlots(selectedDate, timeSlots);
-
   // access the template to be cloned and other elements which hold the clones
   const timeslotTemplate = document.getElementById('timeslot-card');
   const previousDateElement = document.getElementById('timeslot-previous');
   const selectedDateElement = document.getElementById('timeslot-selected');
   const nextDateElement = document.getElementById('timeslot-next');
+
+  // Add date headers
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+  };
+  const dateHeaderElements = document.querySelectorAll('.time-slot__date');
+  dateHeaderElements.forEach((element) => {
+    const dayType = element.getAttribute('data-day-type');
+    if (dayType === 'previous') {
+      element.textContent = formatDate(
+        new Date(selectedDate.getTime() - 24 * 60 * 60 * 1000)
+      );
+    } else if (dayType === 'selected') {
+      element.textContent = formatDate(selectedDate);
+    } else {
+      element.textContent = formatDate(
+        new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000)
+      );
+    }
+  });
 
   // clear any timeslot child elements already present
   previousDateElement.innerHTML = '';
