@@ -106,8 +106,9 @@ export const updateTimeSlots = (event) => {
   const selectedDate = new Date(event.detail.value);
   const timeSlots = window.timeSlots;
   const selectedTimeSlots = getSelectedTimeSlots(selectedDate, timeSlots);
-  // access the template to be cloned and other elements which hold the clones
+  // access the templates to be cloned and other elements which hold the clones
   const timeslotTemplate = document.getElementById('timeslot-card');
+  const timeSlotEmptyTemplate = document.getElementById('timeslot-empty-card');
   const previousDateElement = document.getElementById('timeslot-previous');
   const selectedDateElement = document.getElementById('timeslot-selected');
   const nextDateElement = document.getElementById('timeslot-next');
@@ -138,8 +139,12 @@ export const updateTimeSlots = (event) => {
   nextDateElement.innerHTML = '';
 
   // clone the template and insert time values for the three relevant dates
+  const numTimeSlots = 9;
+  let numChild;
   let clone;
   let innerP;
+
+  // previous
   selectedTimeSlots.previous?.forEach((time) => {
     clone = timeslotTemplate.content.cloneNode(true);
     innerP = clone.querySelector('.time-slot__time');
@@ -148,6 +153,13 @@ export const updateTimeSlots = (event) => {
       'prev';
     previousDateElement.appendChild(clone);
   });
+  numChild = previousDateElement.childElementCount;
+  while (numChild++ < numTimeSlots) {
+    clone = timeSlotEmptyTemplate.content.cloneNode(true);
+    previousDateElement.appendChild(clone);
+  }
+
+  // selected
   selectedTimeSlots.selected?.forEach((time) => {
     clone = timeslotTemplate.content.cloneNode(true);
     innerP = clone.querySelector('.time-slot__time');
@@ -156,6 +168,13 @@ export const updateTimeSlots = (event) => {
       'selected';
     selectedDateElement.appendChild(clone);
   });
+  numChild = selectedDateElement.childElementCount;
+  while (numChild++ < numTimeSlots) {
+    clone = timeSlotEmptyTemplate.content.cloneNode(true);
+    selectedDateElement.appendChild(clone);
+  }
+
+  // next
   selectedTimeSlots.next?.forEach((time) => {
     clone = timeslotTemplate.content.cloneNode(true);
     innerP = clone.querySelector('.time-slot__time');
@@ -164,4 +183,9 @@ export const updateTimeSlots = (event) => {
       'next';
     nextDateElement.appendChild(clone);
   });
+  numChild = nextDateElement.childElementCount;
+  while (numChild++ < numTimeSlots) {
+    clone = timeSlotEmptyTemplate.content.cloneNode(true);
+    nextDateElement.appendChild(clone);
+  }
 };
