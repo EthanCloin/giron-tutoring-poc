@@ -1,3 +1,5 @@
+booking.db
+
 node_modules/
 .venv/
 __pycache__/
