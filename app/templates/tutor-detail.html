@@ -71,6 +71,9 @@
   <template id="timeslot-card">
     <button class="time-slot__time" onclick="toggleTimeSlotBtn(event)"></button>
   </template>
+  <template id="timeslot-empty-card">
+    <p class="time-slot__empty">{% include 'svg/empty-time-slot.html' %}</p>
+  </template>
   <script
     type="module"
     src="{{ url_for('static', filename='js/smart.calendar.js') }}"

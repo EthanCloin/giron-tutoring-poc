@@ -102,6 +102,19 @@
   border: 1px solid var(--secondary-color);
 }
 
+.time-slot__empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+}
+
+.time-slot__empty svg {
+  width: 100%;
+  height: 100%;
+}
+
 /* Example CSS to style a calendar component */
 
 /* General calendar container */
