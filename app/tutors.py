@@ -41,20 +41,3 @@ WHERE ta.TutorID=? AND ta.OverrideDatetimeUTC IS NULL
         availability=availability,
         days_available=days_available,
     )
-
-
-@bp.route("/booking/<int:booking_id>", methods=["GET"])
-def submit_booking_view(booking_id):
-    db = get_db()
-    query = """
-SELECT b.BookingID,
-    b.TimeSlot,
-    t.Name AS TutorName,
-    t.Email
-FROM Bookings b
-    JOIN TutorAvailability ta ON b.TutorAvailabilityID = ta.TutorAvailabilityID
-    JOIN Tutors t ON t.TutorID = ta.TutorID
-WHERE b.BookingID = ?
-"""
-    booking_and_tutor = dict(db.execute(query, (booking_id,)).fetchone())
-    return render_template("booking_form.html", booking=booking_and_tutor)

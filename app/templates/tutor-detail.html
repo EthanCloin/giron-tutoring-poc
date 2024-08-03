@@ -14,7 +14,13 @@
 
 {% endblock %} {% block content %}
 <div id="modal-placeholder"></div>
-<div class="main-contents">
+<div
+  class="main-contents"
+  hx-post="{{ url_for('bookings.generate_bookings', tutor_id=tutor_id)}}"
+  hx-trigger="load"
+  hx-swap="none"
+  hx-vals="js:{'requestTime': currentDateAsISO()}"
+>
   <div class="booking-tutor-wrapper">
     <img
       class="booking-tutor__image"
@@ -60,7 +66,7 @@
       </div>
     </div>
     <button
-      hx-get="{{ url_for('tutors.submit_booking_view', booking_id=1)}}"
+      hx-get="{{ url_for('bookings.submit_booking_view', booking_id=1)}}"
       hx-push-url="true"
       hx-target="#modal-placeholder"
       hx-swap="outerHTML"
@@ -88,6 +94,13 @@
     const dbTimeSlots = JSON.parse('{{ db_time_slots | tojson | safe }}');
     window.timeSlots = mapTimeSlotsFromDB(dbTimeSlots);
     configureCalendar(dbTimeSlots);
+
+    const currentDateAsISO = () => {
+      const now = new Date();
+      console.log('hittin');
+      return now.toISOString();
+    };
+    window.currentDateAsISO = currentDateAsISO;
   </script>
 </div>
 {% endblock %}
