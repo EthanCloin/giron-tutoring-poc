@@ -26,24 +26,6 @@ export const mapTimeSlotsFromDB = (dbTimeSlots) => {
   return timeSlots;
 };
 
-export const mapTimeSlotsFromDB = (dbTimeSlots) => {
-  // TODO: make this work with the timeslots UI
-  const timeSlots = {};
-  for (const timeSlot of dbTimeSlots) {
-    let thisDate = new Date(timeSlot);
-    let timeSlotKey = thisDate.toLocaleDateString(
-      LOCALE_DATE_OPTIONS.locales,
-      LOCALE_DATE_OPTIONS.options
-    );
-    if (timeSlots[timeSlotKey] === undefined) {
-      timeSlots[timeSlotKey] = [];
-    }
-    timeSlots[timeSlotKey].push(thisDate);
-  }
-  console.log(timeSlots);
-  return timeSlots;
-};
-
 /**
  * grabs the timeslots for selectedDate, day before, and day after and returns them in an object.
  *

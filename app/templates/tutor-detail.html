@@ -93,6 +93,7 @@
       mapTimeSlotsFromDB,
       configureCalendar,
     } from '/static/js/calendar-util.js';
+<<<<<<< HEAD
     const dbTimeSlots = JSON.parse('{{ db_time_slots | tojson | safe }}');
     console.log(dbTimeSlots);
     window.timeSlots = mapTimeSlotsFromDB(dbTimeSlots);
@@ -104,6 +105,12 @@
       return now.toISOString();
     };
     window.currentDateAsISO = currentDateAsISO;
+=======
+
+    const dbTimeSlots = JSON.parse('{{ db_time_slots | tojson | safe }}');
+    window.timeSlots = mapTimeSlotsFromDB(dbTimeSlots);
+    configureCalendar(dbTimeSlots);
+>>>>>>> 17b9025 (TimeSlots from DB + Cleanup:)
   </script>
 </div>
 {% endblock %}
