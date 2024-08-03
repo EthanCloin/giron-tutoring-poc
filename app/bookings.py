@@ -1,12 +1,17 @@
 from wsgiref.util import request_uri
 from flask import (
     Blueprint,
+<<<<<<< HEAD
     flash,
     jsonify,
     redirect,
     request,
     render_template,
     url_for,
+=======
+    request,
+    render_template,
+>>>>>>> 74858d3 (Add booking post and cache fxn)
 )
 from app.database import get_db
 from datetime import datetime, timezone, timedelta
@@ -15,22 +20,32 @@ from datetime import datetime, timezone, timedelta
 bp = Blueprint("bookings", __name__, url_prefix="/bookings")
 
 
+<<<<<<< HEAD
 @bp.route("/", methods=["GET"])
 def get_form():
     booking_id = request.args.get("bookingID")
+=======
+@bp.route("/<int:booking_id>", methods=["GET"])
+def submit_booking_view(booking_id):
+>>>>>>> 74858d3 (Add booking post and cache fxn)
     db = get_db()
     query = """
 SELECT b.BookingID,
     b.TimeSlot,
     t.Name AS TutorName,
+<<<<<<< HEAD
     t.Email,
     t.TutorID
+=======
+    t.Email
+>>>>>>> 74858d3 (Add booking post and cache fxn)
 FROM Bookings b
     JOIN TutorAvailability ta ON b.TutorAvailabilityID = ta.TutorAvailabilityID
     JOIN Tutors t ON t.TutorID = ta.TutorID
 WHERE b.BookingID = ?
 """
     booking_and_tutor = dict(db.execute(query, (booking_id,)).fetchone())
+<<<<<<< HEAD
     print("ctx: ", booking_and_tutor)
     return render_template("booking_form.html", booking=booking_and_tutor)
 
@@ -55,6 +70,11 @@ WHERE BookingID = ?
     return response
 
 
+=======
+    return render_template("booking_form.html", booking=booking_and_tutor)
+
+
+>>>>>>> 74858d3 (Add booking post and cache fxn)
 def map_py_weekday_to_utc_day(weekday: int) -> int:
     PY_TO_UTC = {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 0}
     return PY_TO_UTC[weekday]
