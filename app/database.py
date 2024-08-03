@@ -43,6 +43,7 @@ def init_app(app):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 def generate_bookings(all_tutors_availability):
     """accept the tutoravailability data and return 30 days worth of time slots"""
@@ -91,5 +92,7 @@ def insert_bookings(db: sqlite3.Connection):
 
 
 >>>>>>> 830e9eb (checkpoint: calendar broken)
+=======
+>>>>>>> 74858d3 (Add booking post and cache fxn)
 if __name__ == "__main__":
     pass
