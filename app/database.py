@@ -47,6 +47,10 @@ def generate_bookings(all_tutors_availability):
     from datetime import datetime, timezone, timedelta
 
     # TODO: support override dates
+    # TODO: solve the timezone bug throwing off dates in default availability ISSUE #6
+    # https://blogs.oracle.com/javamagazine/post/java-timezone-part-1
+    # plan: generate this based on client request which includes request date and
+    # and cache unless updated by tutor
     bookings = []
     for i in range(31):
         next_day = datetime.now(timezone.utc) + timedelta(days=i)

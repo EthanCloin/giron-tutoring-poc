@@ -1,19 +1,4 @@
-/**
- * days and times a tutor is available
- *
- * @typedef {Object} Availability
- * @property {Number} DayUTC
- * @property {string} TimeUTC - in "HH:MM" format
- */
-
-// TODO: add function to account for Override availabilities
-
-const LOCALE_DATE_OPTIONS = {
-  locales: 'en-US',
-  options: { month: '2-digit', day: '2-digit' },
-};
-
-export const TIME_OPTIONS = {
+const TIME_OPTIONS = {
   locale: 'en-US',
   options: {
     hour: '2-digit',
@@ -21,78 +6,44 @@ export const TIME_OPTIONS = {
     hour12: true,
   },
 };
-/**
- *
- * @param {Array.<Number>} defaultAvailableDays
- * @returns {Array.<Date>} unavailable dates for the next 30 days
- */
-export const createDefaultRestrictedDates = (defaultAvailableDays) => {
-  // TODO: determine how this is offsetting availability from database by a day
-  //  expecting tutorid=1 to have 9-5 M-F EST but it's S-Th now
-  // OR maybe it's just looking wrong bc i'm allowing selection of days in the past
-  const restrictedDates = [];
-  for (let i = 0; i <= 30; i++) {
-    const nextDay = new Date();
-    nextDay.setUTCDate(nextDay.getUTCDate() + i);
-    const dayIsAvailable = defaultAvailableDays.includes(nextDay.getUTCDay());
-    if (!dayIsAvailable) {
-      restrictedDates.push(nextDay);
-    }
-  }
-
-  return restrictedDates;
-};
 
 /**
- * use the default availability to create an object mapping a date string 'mm-dd'
- * to an array of Date objects representing time slots
- *
- * @param {Array.<Availability>} defaultAvailability
+ * takes the array of TimeSlots and creates a map where the key is the formatted string
+ * and the value is array of Date objects
+ * @param {*} dbTimeSlots
+ * @returns
  */
-export const createDefaultTimeSlots = (defaultAvailability) => {
-  // key is DateString, value is array of Date objects
+export const mapTimeSlotsFromDB = (dbTimeSlots) => {
   const timeSlots = {};
-
-  for (let i = 0; i <= 30; i++) {
-    const nextDay = new Date();
-    nextDay.setUTCDate(nextDay.getUTCDate() + i);
-
-    const timeSlotKey = nextDay.toLocaleDateString(LOCALE_DATE_OPTIONS);
-    timeSlots[timeSlotKey] = [];
-    const availableTimes = defaultAvailability
-      .filter((a) => a.DayUTC === nextDay.getUTCDay())
-      .map((a) => {
-        const [utcHours, utcMinutes] = a.TimeUTC.split(':').map((x) =>
-          Number(x)
-        );
-        const timeSlot = new Date(nextDay);
-        timeSlot.setUTCHours(utcHours, utcMinutes);
-        return timeSlot;
-      });
-    availableTimes.forEach((timeSlot) => {
-      timeSlots[timeSlotKey].push(timeSlot);
-    });
+  for (const timeSlot of dbTimeSlots) {
+    let thisDate = new Date(timeSlot);
+    let timeSlotKey = formatDayKey(thisDate);
+    if (timeSlots[timeSlotKey] === undefined) {
+      timeSlots[timeSlotKey] = [];
+    }
+    timeSlots[timeSlotKey].push(thisDate);
   }
+  console.log(timeSlots);
   return timeSlots;
 };
 
 /**
+ * grabs the timeslots for selectedDate, day before, and day after and returns them in an object.
  *
  * @param {Date} selectedDate
- * @param {*} timeSlots object whose keys are localedatestrings and value is Array.<Date>
+ * @param {Object} timeSlots keys are localedatestrings and value is Array.<Date>
  */
 export const getSelectedTimeSlots = (selectedDate, timeSlots) => {
   const previousDay = new Date(selectedDate);
   previousDay.setUTCDate(selectedDate.getUTCDate() - 1);
-  const previousDayKey = previousDay.toLocaleDateString(LOCALE_DATE_OPTIONS);
+  const previousDayKey = formatDayKey(previousDay);
 
   const nextDay = new Date(selectedDate);
   nextDay.setUTCDate(selectedDate.getUTCDate() + 1);
-  const nextDayKey = nextDay.toLocaleDateString(LOCALE_DATE_OPTIONS);
+  const nextDayKey = formatDayKey(nextDay);
 
   const previousTimeSlots = timeSlots[previousDayKey];
-  const selectedTimeSlots =
-    timeSlots[selectedDate.toLocaleDateString(LOCALE_DATE_OPTIONS)];
+  const selectedTimeSlots = timeSlots[formatDayKey(selectedDate)];
   const nextTimeSlots = timeSlots[nextDayKey];
 
   return {
@@ -102,8 +53,16 @@ export const getSelectedTimeSlots = (selectedDate, timeSlots) => {
   };
 };
 
+/**
+ * handler for selection of a date on the calendar.
+ * renders elements for the timeslots based on which date is selected.
+ *
+ * @param {*} event
+ */
 export const updateTimeSlots = (event) => {
   const selectedDate = new Date(event.detail.value);
+  renderDateHeaders(selectedDate);
+
   const timeSlots = window.timeSlots;
   const selectedTimeSlots = getSelectedTimeSlots(selectedDate, timeSlots);
   // access the templates to be cloned and other elements which hold the clones
@@ -113,11 +72,79 @@ export const updateTimeSlots = (event) => {
   const selectedDateElement = document.getElementById('timeslot-selected');
   const nextDateElement = document.getElementById('timeslot-next');
 
-  // Add date headers
+  // clear any timeslot child elements already present
+  previousDateElement.innerHTML = '';
+  selectedDateElement.innerHTML = '';
+  nextDateElement.innerHTML = '';
+
+  // clone the template and insert time values for the three relevant dates
+  const numTimeSlots = 9;
+  let numChild;
+  let clone;
+  let button;
+
+  // previous
+  selectedTimeSlots.previous?.forEach((time) => {
+    clone = timeslotTemplate.content.cloneNode(true);
+    button = clone.querySelector('.time-slot__time');
+    button.textContent = time.toLocaleTimeString(
+      TIME_OPTIONS.locale,
+      TIME_OPTIONS.options
+    );
+    button.onclick = selectTimeSlot;
+    previousDateElement.appendChild(clone);
+  });
+  numChild = previousDateElement.childElementCount;
+  while (numChild++ < numTimeSlots) {
+    clone = timeSlotEmptyTemplate.content.cloneNode(true);
+    previousDateElement.appendChild(clone);
+  }
+
+  // selected
+  selectedTimeSlots.selected?.forEach((time) => {
+    clone = timeslotTemplate.content.cloneNode(true);
+    button = clone.querySelector('.time-slot__time');
+    button.textContent = time.toLocaleTimeString(
+      TIME_OPTIONS.locale,
+      TIME_OPTIONS.options
+    );
+    button.onclick = selectTimeSlot;
+    selectedDateElement.appendChild(clone);
+  });
+  numChild = selectedDateElement.childElementCount;
+  while (numChild++ < numTimeSlots) {
+    clone = timeSlotEmptyTemplate.content.cloneNode(true);
+    selectedDateElement.appendChild(clone);
+  }
+
+  // next
+  selectedTimeSlots.next?.forEach((time) => {
+    clone = timeslotTemplate.content.cloneNode(true);
+    button = clone.querySelector('.time-slot__time');
+    button.textContent = time.toLocaleTimeString(
+      TIME_OPTIONS.locale,
+      TIME_OPTIONS.options
+    );
+    button.onclick = selectTimeSlot;
+    nextDateElement.appendChild(clone);
+  });
+  numChild = nextDateElement.childElementCount;
+  while (numChild++ < numTimeSlots) {
+    clone = timeSlotEmptyTemplate.content.cloneNode(true);
+    nextDateElement.appendChild(clone);
+  }
+};
+
+const renderDateHeaders = (selectedDate) => {
+  /*
+   NOTE: instead of adding the day-type data attribute to the markup, you can
+   reuse the getSelectedTimeSlots function
+  */
   const formatDate = (date) => {
     return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
   };
   const dateHeaderElements = document.querySelectorAll('.time-slot__date');
+
   dateHeaderElements.forEach((element) => {
     const dayType = element.getAttribute('data-day-type');
     if (dayType === 'previous') {
@@ -132,60 +159,56 @@ export const updateTimeSlots = (event) => {
       );
     }
   });
+};
 
-  // clear any timeslot child elements already present
-  previousDateElement.innerHTML = '';
-  selectedDateElement.innerHTML = '';
-  nextDateElement.innerHTML = '';
+/**
+ * helper to consistently build key from a given Date which maps to the global timeSlots values
+ *
+ * @param {Date} date
+ * @returns
+ */
+const formatDayKey = (date) => {
+  const DATE_FORMAT = {
+    locales: 'en-US',
+    options: { month: '2-digit', day: '2-digit', year: 'numeric' },
+  };
+  return date.toLocaleDateString(DATE_FORMAT.locales, DATE_FORMAT.options);
+};
 
-  // clone the template and insert time values for the three relevant dates
-  const numTimeSlots = 9;
-  let numChild;
-  let clone;
-  let innerP;
+const getAvailableDays = (dbTimeSlots) => {
+  const uniqueDays = new Set();
 
-  // previous
-  selectedTimeSlots.previous?.forEach((time) => {
-    clone = timeslotTemplate.content.cloneNode(true);
-    innerP = clone.querySelector('.time-slot__time');
-    innerP.textContent =
-      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options) +
-      'prev';
-    previousDateElement.appendChild(clone);
+  dbTimeSlots.forEach((date) => {
+    const dayString = new Date(date).toDateString();
+    uniqueDays.add(dayString);
   });
-  numChild = previousDateElement.childElementCount;
-  while (numChild++ < numTimeSlots) {
-    clone = timeSlotEmptyTemplate.content.cloneNode(true);
-    previousDateElement.appendChild(clone);
-  }
 
-  // selected
-  selectedTimeSlots.selected?.forEach((time) => {
-    clone = timeslotTemplate.content.cloneNode(true);
-    innerP = clone.querySelector('.time-slot__time');
-    innerP.textContent =
-      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options) +
-      'selected';
-    selectedDateElement.appendChild(clone);
-  });
-  numChild = selectedDateElement.childElementCount;
-  while (numChild++ < numTimeSlots) {
-    clone = timeSlotEmptyTemplate.content.cloneNode(true);
-    selectedDateElement.appendChild(clone);
-  }
+  return Array.from(uniqueDays).map((d) => new Date(d));
+};
 
-  // next
-  selectedTimeSlots.next?.forEach((time) => {
-    clone = timeslotTemplate.content.cloneNode(true);
-    innerP = clone.querySelector('.time-slot__time');
-    innerP.textContent =
-      time.toLocaleTimeString(TIME_OPTIONS.locale, TIME_OPTIONS.options) +
-      'next';
-    nextDateElement.appendChild(clone);
-  });
-  numChild = nextDateElement.childElementCount;
-  while (numChild++ < numTimeSlots) {
-    clone = timeSlotEmptyTemplate.content.cloneNode(true);
-    nextDateElement.appendChild(clone);
+let PREV_SELECTED_BTN = null;
+const selectTimeSlot = (event) => {
+  const currBtn = event.target;
+  if (PREV_SELECTED_BTN && PREV_SELECTED_BTN !== currBtn) {
+    PREV_SELECTED_BTN.classList.remove('time-slot__time-toggled');
   }
+  if (PREV_SELECTED_BTN !== currBtn) {
+    currBtn.classList.toggle('time-slot__time-toggled');
+  }
+  PREV_SELECTED_BTN = currBtn;
+};
+
+export const configureCalendar = (dbTimeSlots) => {
+  // configure calendar
+  const calendar = document.getElementById('calendar');
+  calendar.min = new Date();
+  const thirtyDaysAway = new Date();
+  thirtyDaysAway.setDate(new Date().getDate() + 30);
+  calendar.max = thirtyDaysAway;
+  calendar.hideOtherMonthDays = true;
+  calendar.importantDates = getAvailableDays(dbTimeSlots);
+  calendar.addEventListener('change', updateTimeSlots);
+
+  // // refresh calendar on initial load
+  updateTimeSlots({ detail: { value: calendar.min.toISOString() } });
 };

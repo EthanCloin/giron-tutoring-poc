@@ -1,5 +1,5 @@
 {% extends 'layout.html' %} {% block head %}
-
+<!-- TODO: figure out why the calendar throws an error and looks weird when moving through browser history -->
 <link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
 <link
   rel="stylesheet"
@@ -69,7 +69,7 @@
     </button>
   </div>
   <template id="timeslot-card">
-    <button class="time-slot__time" onclick="toggleTimeSlotBtn(event)"></button>
+    <button class="time-slot__time"></button>
   </template>
   <template id="timeslot-empty-card">
     <p class="time-slot__empty">{% include 'svg/empty-time-slot.html' %}</p>
@@ -77,54 +77,17 @@
   <script
     type="module"
     src="{{ url_for('static', filename='js/smart.calendar.js') }}"
+    defer
   ></script>
-  <script type="module">
-    // update the calendar restricted dates and create timeslots
+  <script type="module" defer>
     import {
-      createDefaultRestrictedDates,
-      createDefaultTimeSlots,
-      getSelectedTimeSlots,
-      updateTimeSlots,
+      mapTimeSlotsFromDB,
+      configureCalendar,
     } from '/static/js/calendar-util.js';
 
-    const calendar = document.getElementById('calendar');
-    calendar.min = new Date();
-    const thirtyDaysAway = new Date();
-    thirtyDaysAway.setDate(new Date().getDate() + 30);
-    calendar.max = thirtyDaysAway;
-    calendar.restrictedDates = [
-      ...calendar.restrictedDates,
-      ...createDefaultRestrictedDates('{{ days_available }}'),
-    ];
-    calendar.hideOtherMonthDays = true;
-    const timeSlots = createDefaultTimeSlots(
-      JSON.parse('{{ availability | tojson | safe }}')
-    );
-
-    window.timeSlots = timeSlots;
-
-    calendar.addEventListener('change', updateTimeSlots);
-
-    // refresh calendar on initial load
-    if (calendar.selectedDates.length > 0) {
-      calendar.clearSelection();
-      calendar.today();
-    } else {
-      calendar.selectedDates = [calendar.min];
-      updateTimeSlots({ detail: { value: calendar.min.toISOString() } });
-    }
-
-    let prevBtn = null;
-    window.toggleTimeSlotBtn = function (event) {
-      const currBtn = event.target;
-      if (prevBtn && prevBtn !== currBtn) {
-        prevBtn.classList.remove('time-slot__time-toggled');
-      }
-      if (prevBtn !== currBtn) {
-        currBtn.classList.toggle('time-slot__time-toggled');
-      }
-      prevBtn = currBtn;
-    };
+    const dbTimeSlots = JSON.parse('{{ db_time_slots | tojson | safe }}');
+    window.timeSlots = mapTimeSlotsFromDB(dbTimeSlots);
+    configureCalendar(dbTimeSlots);
   </script>
 </div>
 {% endblock %}
