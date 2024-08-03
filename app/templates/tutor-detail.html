@@ -1,6 +1,4 @@
 {% extends 'layout.html' %} {% block head %}
-
-<link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
 <link
   rel="stylesheet"
   type="text/css"
@@ -11,6 +9,7 @@
   type="text/css"
   href="{{ url_for('static', filename='css/booking.css')}}"
 />
+<link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
 
 {% endblock %} {% block content %}
 <div id="modal-placeholder"></div>
@@ -59,11 +58,14 @@
         <div class="time-slot time-slot__next-day" id="timeslot-next"></div>
       </div>
     </div>
+  </div>
+  <div class="booking-btn-wrapper">
     <button
       hx-get="{{ url_for('tutors.submit_booking_view', booking_id=1)}}"
       hx-push-url="true"
       hx-target="#modal-placeholder"
       hx-swap="outerHTML"
+      class="booking-btn"
     >
       Book Now
     </button>
@@ -88,6 +90,7 @@
     } from '/static/js/calendar-util.js';
 
     const calendar = document.getElementById('calendar');
+    const bookBtn = document.querySelector('.booking-btn');
     calendar.min = new Date();
     const thirtyDaysAway = new Date();
     thirtyDaysAway.setDate(new Date().getDate() + 30);
@@ -103,7 +106,12 @@
 
     window.timeSlots = timeSlots;
 
-    calendar.addEventListener('change', updateTimeSlots);
+    function handleChange(event) {
+      bookBtn.style.visibility = 'hidden';
+      updateTimeSlots(event);
+    }
+
+    calendar.addEventListener('change', handleChange);
 
     // refresh calendar on initial load
     if (calendar.selectedDates.length > 0) {
@@ -124,6 +132,7 @@
         currBtn.classList.toggle('time-slot__time-toggled');
       }
       prevBtn = currBtn;
+      bookBtn.style.visibility = 'visible';
     };
   </script>
 </div>
