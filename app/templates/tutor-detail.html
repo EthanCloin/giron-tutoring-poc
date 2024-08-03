@@ -82,8 +82,8 @@
       createDefaultTimeSlots,
       getSelectedTimeSlots,
       updateTimeSlots,
+      mapTimeSlotsFromDB,
     } from '/static/js/calendar-util.js';
-
     const calendar = document.getElementById('calendar');
     calendar.min = new Date();
     const thirtyDaysAway = new Date();
@@ -94,10 +94,14 @@
       ...createDefaultRestrictedDates('{{ days_available }}'),
     ];
     calendar.hideOtherMonthDays = true;
-    const timeSlots = createDefaultTimeSlots(
+    const oldtimeSlots = createDefaultTimeSlots(
       JSON.parse('{{ availability | tojson | safe }}')
     );
-
+    console.log('old', oldtimeSlots);
+    const timeSlots = mapTimeSlotsFromDB(
+      JSON.parse('{{ db_time_slots | tojson | safe }}')
+    );
+    console.log('new ', timeSlots);
     window.timeSlots = timeSlots;
 
     calendar.addEventListener('change', updateTimeSlots);

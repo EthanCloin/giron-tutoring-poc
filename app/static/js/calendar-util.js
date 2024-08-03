@@ -76,6 +76,24 @@ export const createDefaultTimeSlots = (defaultAvailability) => {
   return timeSlots;
 };
 
+export const mapTimeSlotsFromDB = (dbTimeSlots) => {
+  // TODO: make this work with the timeslots UI
+  const timeSlots = {};
+  for (const timeSlot of dbTimeSlots) {
+    let thisDate = new Date(timeSlot);
+    let timeSlotKey = thisDate.toLocaleDateString(
+      LOCALE_DATE_OPTIONS.locales,
+      LOCALE_DATE_OPTIONS.options
+    );
+    if (timeSlots[timeSlotKey] === undefined) {
+      timeSlots[timeSlotKey] = [];
+    }
+    timeSlots[timeSlotKey].push(thisDate);
+  }
+  console.log(timeSlots);
+  return timeSlots;
+};
+
 /**
  *
  * @param {Date} selectedDate
