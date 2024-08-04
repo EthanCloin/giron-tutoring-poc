@@ -1,0 +1,34 @@
+{% extends 'layout.html' %} {% block head %}
+<link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
+{% endblock %} {% block content %}
+<section class="tutor">
+  <img
+    class="tutor__image"
+    src="{{ url_for('static', filename='images/Placeholder.jpg') }}"
+  />
+  <h1 class="tutor__name">{{ tutor.Name.title() }}</h1>
+  <p class="tutor__bio">{{ tutor.bio or "lorem ipsum dolor" }}</p>
+</section>
+<section class="booking">
+  <smart-calendar
+    hx-trigger="change delay:1s"
+    hx-on:change="window.selectedDate = new Date(event['detail']['value']).toISOString(); window.tutorID = '{{ tutor.TutorID }}' "
+    hx-target=".time-slots"
+    hx-vals="js:{'selectedDate': window.selectedDate, 'tutorID': window.tutorID}"
+    hx-get="{{ url_for('bookings.get_time_slots')}}"
+  ></smart-calendar>
+  <div class="time-slots">
+    <ol class="time-slots__times times--previous"></ol>
+    <ol class="time-slots__times times--selected"></ol>
+    <ol class="time-slots__times times--next"></ol>
+  </div>
+</section>
+<script
+  type="module"
+  src="{{ url_for('static', filename='js/smart.calendar.js') }}"
+></script>
+<script
+  type="module"
+  src="{{ url_for('static', filename='js/smart.element.js') }}"
+></script>
+{% endblock %}
