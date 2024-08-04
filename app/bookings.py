@@ -11,8 +11,10 @@ from datetime import datetime, timezone, timedelta
 bp = Blueprint("bookings", __name__, url_prefix="/bookings")
 
 
-@bp.route("/<int:booking_id>", methods=["GET"])
-def submit_booking_view(booking_id):
+@bp.route("/", methods=["GET"])
+def submit_booking_view():
+    booking_id = request.form.to_dict()["bookingID"]
+    print(booking_id)
     db = get_db()
     query = """
 SELECT b.BookingID,

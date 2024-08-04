@@ -35,15 +35,14 @@ WHERE ta.TutorID=? AND ta.OverrideDatetimeUTC IS NULL
     tutor_name = availability[0].get("TutorName")
 
     ts_query = """
-SELECT b.TimeSlot
+SELECT b.TimeSlot, b.BookingID
 FROM Bookings b
 JOIN TutorAvailability ta on ta.TutorAvailabilityID = b.TutorAvailabilityID
 JOIN Tutors t on t.TutorID = ta.TutorID
 WHERE t.TutorID = ?
 """
-    time_slots = [
-        dict(r).get("TimeSlot") for r in db.execute(ts_query, (tutor_id,)).fetchall()
-    ]
+    res = db.execute(ts_query, (tutor_id,)).fetchall()
+    time_slots = [dict(r) for r in res]
 
     return render_template(
         "tutor-detail.html",
