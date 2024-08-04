@@ -1,5 +1,5 @@
 {% extends 'layout.html' %} {% block head %}
-
+<!-- TODO: figure out why the calendar throws an error and looks weird when moving through browser history -->
 <link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
 <link
   rel="stylesheet"
@@ -14,7 +14,13 @@
 
 {% endblock %} {% block content %}
 <div id="modal-placeholder"></div>
-<div class="main-contents">
+<div
+  class="main-contents"
+  hx-post="{{ url_for('bookings.generate_bookings', tutor_id=tutor_id)}}"
+  hx-trigger="load"
+  hx-swap="none"
+  hx-vals="js:{'requestTime': currentDateAsISO()}"
+>
   <div class="booking-tutor-wrapper">
     <img
       class="booking-tutor__image"
@@ -60,16 +66,17 @@
       </div>
     </div>
     <button
-      hx-get="{{ url_for('tutors.submit_booking_view', booking_id=1)}}"
+      hx-get="{{ url_for('bookings.submit_booking_view') }}"
       hx-push-url="true"
       hx-target="#modal-placeholder"
       hx-swap="outerHTML"
+      hx-vals="js:{'bookingID': selectedBookingID}"
     >
       Book Now
     </button>
   </div>
   <template id="timeslot-card">
-    <button class="time-slot__time" onclick="toggleTimeSlotBtn(event)"></button>
+    <button class="time-slot__time"></button>
   </template>
   <template id="timeslot-empty-card">
     <p class="time-slot__empty">{% include 'svg/empty-time-slot.html' %}</p>
@@ -77,54 +84,25 @@
   <script
     type="module"
     src="{{ url_for('static', filename='js/smart.calendar.js') }}"
+    defer
   ></script>
-  <script type="module">
-    // update the calendar restricted dates and create timeslots
+  <script type="module" defer>
     import {
-      createDefaultRestrictedDates,
-      createDefaultTimeSlots,
-      getSelectedTimeSlots,
-      updateTimeSlots,
+      mapTimeSlotsFromDB,
+      configureCalendar,
     } from '/static/js/calendar-util.js';
 
-    const calendar = document.getElementById('calendar');
-    calendar.min = new Date();
-    const thirtyDaysAway = new Date();
-    thirtyDaysAway.setDate(new Date().getDate() + 30);
-    calendar.max = thirtyDaysAway;
-    calendar.restrictedDates = [
-      ...calendar.restrictedDates,
-      ...createDefaultRestrictedDates('{{ days_available }}'),
-    ];
-    calendar.hideOtherMonthDays = true;
-    const timeSlots = createDefaultTimeSlots(
-      JSON.parse('{{ availability | tojson | safe }}')
-    );
+    const dbTimeSlots = JSON.parse('{{ db_time_slots | tojson | safe }}');
+    console.log(dbTimeSlots);
+    window.timeSlots = mapTimeSlotsFromDB(dbTimeSlots);
+    configureCalendar(dbTimeSlots);
 
-    window.timeSlots = timeSlots;
-
-    calendar.addEventListener('change', updateTimeSlots);
-
-    // refresh calendar on initial load
-    if (calendar.selectedDates.length > 0) {
-      calendar.clearSelection();
-      calendar.today();
-    } else {
-      calendar.selectedDates = [calendar.min];
-      updateTimeSlots({ detail: { value: calendar.min.toISOString() } });
-    }
-
-    let prevBtn = null;
-    window.toggleTimeSlotBtn = function (event) {
-      const currBtn = event.target;
-      if (prevBtn && prevBtn !== currBtn) {
-        prevBtn.classList.remove('time-slot__time-toggled');
-      }
-      if (prevBtn !== currBtn) {
-        currBtn.classList.toggle('time-slot__time-toggled');
-      }
-      prevBtn = currBtn;
+    const currentDateAsISO = () => {
+      const now = new Date();
+      console.log('hittin');
+      return now.toISOString();
     };
+    window.currentDateAsISO = currentDateAsISO;
   </script>
 </div>
 {% endblock %}
