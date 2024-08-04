@@ -4,7 +4,7 @@
     src="{{ url_for('static', filename='/images/nextStep-logo.png') }}"
   />
   <nav class="navigation">
-    <a class="nav-util" href="#">Home</a>
+    <a class="nav-util" href="{{ url_for('home')}}">Home</a>
     <a class="nav-util" href="#">About</a>
     <a class="nav-util" href="{{ url_for('tutors.all_tutors_view') }}"
       >Services</a

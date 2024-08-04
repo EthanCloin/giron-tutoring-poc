@@ -29,7 +29,7 @@ def create_app(test_config=None):
 
     @app.route("/")
     def home():
-        return render_template("google-vs-custom.html")
+        return render_template("index.html")
 
     from . import database, tutors, bookings
 

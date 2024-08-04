@@ -1,0 +1,11 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="intro-text">
+  <h1>Looking for support?</h1>
+  <h2>Let us help you take the Next Step!</h2>
+  <p>Empowering Families and Enabling Educational Flexibility</p>
+  <!-- some nice student pictures -->
+  <a href="{{ url_for('tutors.all_tutors_view')}}">
+    <button>Find a Tutor Now</button>
+  </a>
+</div>
+{% endblock %}
