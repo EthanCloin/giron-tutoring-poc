@@ -201,8 +201,11 @@ const selectTimeSlot = (event) => {
   }
   PREV_SELECTED_BTN = currBtn;
   window.selectedBookingID = currBtn.dataset.id;
+<<<<<<< HEAD
   let bookingButton = document.getElementById('book-now');
   bookingButton.disabled = false;
+=======
+>>>>>>> 301372a (Timeslots include BookingID)
 };
 
 export const configureCalendar = (dbTimeSlots) => {
