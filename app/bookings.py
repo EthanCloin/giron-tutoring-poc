@@ -87,6 +87,42 @@ def map_py_weekday_to_utc_day(weekday: int) -> int:
     return PY_TO_UTC[weekday]
 
 
+@bp.route("/time-slots", methods=["GET"])
+def get_time_slots():
+    db = get_db()
+    request_data = request.args
+    selected_date = parse_iso(request_data["selectedDate"])
+    tutor_id = int(request_data["tutorID"])
+
+    # TODO: cache query result in Flask request or q or wherever
+    query = """
+SELECT b.BookingID, b.TimeSlot
+FROM Bookings b
+JOIN TutorAvailability ta ON ta.TutorAvailabilityID = b.TutorAvailabilityID
+JOIN Tutors t ON ta.TutorID = t.TutorID
+WHERE t.TutorID = ?"""
+    bookings = [dict(r) for r in db.execute(query, (tutor_id,)).fetchall()]
+    display_time_slots = [
+        b
+        for b in bookings
+        if in_display_range(selected_date, parse_iso(b.get("TimeSlot")))
+    ]
+    # TODO: decide how to either do mapping here or use Jinja to map to elements.
+    # also actually add the time-slots template
+    return render_template("time-slots.html", time_slots=display_time_slots)
+
+
+def parse_iso(iso_string) -> datetime:
+    if iso_string.endswith("Z"):
+        iso_string = iso_string[:-1] + "+00:00"
+    return datetime.fromisoformat(iso_string)
+
+
+def in_display_range(selected_date: datetime, other_date: datetime) -> bool:
+    difference = selected_date - other_date
+    return difference.days in range(-1, 2)
+
+
 @bp.route("/<tutor_id>/create", methods=["POST"])
 def generate_bookings(tutor_id):
     """accept the tutoravailability data and return 30 days worth of time slots"""
@@ -102,7 +138,7 @@ def generate_bookings(tutor_id):
         request_time_iso = request_time_iso[:-1] + "+00:00"
 
     request_date = datetime.fromisoformat(request_time_iso).astimezone(timezone.utc)
-    if is_cached(tutor_id, request_date):
+    if cache_hit(tutor_id, request_date):
         return "cached"
 
     query = """
@@ -153,7 +189,7 @@ def build_booking_entries(request_day: datetime, tutor_availability):
     ]
 
 
-def is_cached(tutor_id, request_date: datetime):
+def cache_hit(tutor_id, request_date: datetime):
     db = get_db()
     get_cached_query = "SELECT LastGenerated FROM BookingsCache WHERE TutorID = ?"
     found_time = db.execute(get_cached_query, (tutor_id,)).fetchone()
