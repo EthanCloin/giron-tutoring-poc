@@ -34,6 +34,16 @@ WHERE ta.TutorID=? AND ta.OverrideDatetimeUTC IS NULL
     days_available = set(a["DayUTC"] for a in availability)
     tutor_name = availability[0].get("TutorName")
 
+    ts_query = """
+SELECT b.TimeSlot, b.BookingID
+FROM Bookings b
+JOIN TutorAvailability ta on ta.TutorAvailabilityID = b.TutorAvailabilityID
+JOIN Tutors t on t.TutorID = ta.TutorID
+WHERE t.TutorID = ?
+"""
+    res = db.execute(ts_query, (tutor_id,)).fetchall()
+    time_slots = [dict(r) for r in res]
+
     return render_template(
         "tutor-detail.html",
         tutor_name=tutor_name,
