@@ -21,6 +21,7 @@ bp = Blueprint("bookings", __name__, url_prefix="/bookings")
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 @bp.route("/", methods=["GET"])
 def get_form():
     booking_id = request.args.get("bookingID")
@@ -28,6 +29,12 @@ def get_form():
 @bp.route("/<int:booking_id>", methods=["GET"])
 def submit_booking_view(booking_id):
 >>>>>>> 74858d3 (Add booking post and cache fxn)
+=======
+@bp.route("/", methods=["GET"])
+def submit_booking_view():
+    booking_id = request.form.to_dict()["bookingID"]
+    print(booking_id)
+>>>>>>> 301372a (Timeslots include BookingID)
     db = get_db()
     query = """
 SELECT b.BookingID,

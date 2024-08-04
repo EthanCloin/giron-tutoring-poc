@@ -67,16 +67,23 @@
     </div>
     <button
 <<<<<<< HEAD
+<<<<<<< HEAD
       id="book-now"
       hx-get="{{ url_for('bookings.get_form') }}"
 =======
       hx-get="{{ url_for('bookings.submit_booking_view', booking_id=1)}}"
 >>>>>>> 74858d3 (Add booking post and cache fxn)
+=======
+      hx-get="{{ url_for('bookings.submit_booking_view') }}"
+>>>>>>> 301372a (Timeslots include BookingID)
       hx-push-url="true"
       hx-target="#modal-placeholder"
       hx-swap="outerHTML"
       hx-vals="js:{'bookingID': selectedBookingID}"
+<<<<<<< HEAD
       disabled
+=======
+>>>>>>> 301372a (Timeslots include BookingID)
     >
       Book Now
     </button>
