@@ -8,22 +8,21 @@ const TIME_OPTIONS = {
 };
 
 /**
- * takes the array of TimeSlots and creates a map where the key is the formatted string
- * and the value is array of Date objects
+ * takes the array of {'TimeSlot': "", 'BookingID': 0} and creates a map where the key is the formatted string
+ * and the value is array of {'time': Date, 'id': 0}
  * @param {*} dbTimeSlots
  * @returns
  */
 export const mapTimeSlotsFromDB = (dbTimeSlots) => {
   const timeSlots = {};
   for (const timeSlot of dbTimeSlots) {
-    let thisDate = new Date(timeSlot);
+    let thisDate = new Date(timeSlot['TimeSlot']);
     let timeSlotKey = formatDayKey(thisDate);
     if (timeSlots[timeSlotKey] === undefined) {
       timeSlots[timeSlotKey] = [];
     }
-    timeSlots[timeSlotKey].push(thisDate);
+    timeSlots[timeSlotKey].push({ time: thisDate, id: timeSlot['BookingID'] });
   }
-  console.log(timeSlots);
   return timeSlots;
 };
 
@@ -84,13 +83,14 @@ export const updateTimeSlots = (event) => {
   let button;
 
   // previous
-  selectedTimeSlots.previous?.forEach((time) => {
+  selectedTimeSlots.previous?.forEach(({ time, id }) => {
     clone = timeslotTemplate.content.cloneNode(true);
     button = clone.querySelector('.time-slot__time');
     button.textContent = time.toLocaleTimeString(
       TIME_OPTIONS.locale,
       TIME_OPTIONS.options
     );
+    button.dataset.id = id;
     button.onclick = selectTimeSlot;
     previousDateElement.appendChild(clone);
   });
@@ -101,13 +101,14 @@ export const updateTimeSlots = (event) => {
   }
 
   // selected
-  selectedTimeSlots.selected?.forEach((time) => {
+  selectedTimeSlots.selected?.forEach(({ time, id }) => {
     clone = timeslotTemplate.content.cloneNode(true);
     button = clone.querySelector('.time-slot__time');
     button.textContent = time.toLocaleTimeString(
       TIME_OPTIONS.locale,
       TIME_OPTIONS.options
     );
+    button.dataset.id = id;
     button.onclick = selectTimeSlot;
     selectedDateElement.appendChild(clone);
   });
@@ -118,13 +119,14 @@ export const updateTimeSlots = (event) => {
   }
 
   // next
-  selectedTimeSlots.next?.forEach((time) => {
+  selectedTimeSlots.next?.forEach(({ time, id }) => {
     clone = timeslotTemplate.content.cloneNode(true);
     button = clone.querySelector('.time-slot__time');
     button.textContent = time.toLocaleTimeString(
       TIME_OPTIONS.locale,
       TIME_OPTIONS.options
     );
+    button.dataset.id = id;
     button.onclick = selectTimeSlot;
     nextDateElement.appendChild(clone);
   });
@@ -178,10 +180,12 @@ const formatDayKey = (date) => {
 const getAvailableDays = (dbTimeSlots) => {
   const uniqueDays = new Set();
 
-  dbTimeSlots.forEach((date) => {
-    const dayString = new Date(date).toDateString();
-    uniqueDays.add(dayString);
-  });
+  dbTimeSlots
+    .map((x) => x['TimeSlot'])
+    .forEach((date) => {
+      const dayString = new Date(date).toDateString();
+      uniqueDays.add(dayString);
+    });
 
   return Array.from(uniqueDays).map((d) => new Date(d));
 };
@@ -196,6 +200,7 @@ const selectTimeSlot = (event) => {
     currBtn.classList.toggle('time-slot__time-toggled');
   }
   PREV_SELECTED_BTN = currBtn;
+  window.selectedBookingID = currBtn.dataset.id;
 };
 
 export const configureCalendar = (dbTimeSlots) => {
