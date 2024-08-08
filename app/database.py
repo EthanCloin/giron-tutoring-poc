@@ -42,18 +42,12 @@ def init_app(app):
     app.cli.add_command(init_db_command)
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 def generate_bookings(all_tutors_availability):
     """accept the tutoravailability data and return 30 days worth of time slots"""
     from datetime import datetime, timezone, timedelta
 
     # TODO: support override dates
     # TODO: solve the timezone bug throwing off dates in default availability ISSUE #6
-    # https://blogs.oracle.com/javamagazine/post/java-timezone-part-1
-    # plan: generate this based on client request which includes request date and
-    # and cache unless updated by tutor
     bookings = []
     for i in range(31):
         next_day = datetime.now(timezone.utc) + timedelta(days=i)
@@ -91,8 +85,5 @@ def insert_bookings(db: sqlite3.Connection):
     db.commit()
 
 
->>>>>>> 830e9eb (checkpoint: calendar broken)
-=======
->>>>>>> 74858d3 (Add booking post and cache fxn)
 if __name__ == "__main__":
     pass
