@@ -1,0 +1,17 @@
+<!-- TODO: add booking_id and link to booking form to each of these -->
+<!-- TODO: add styling -->
+<ol class="time-slots__times times--previous">
+  {% for ts in time_slots['previous'] %}
+  <li class="time">{{ ts['TimeSlot'] + ' prev'}}</li>
+  {% endfor %}
+</ol>
+<ol class="time-slots__times times--selected">
+  {% for ts in time_slots['selected'] %}
+  <li class="time">{{ ts['TimeSlot'] + ' sel'}}</li>
+  {% endfor %}
+</ol>
+<ol class="time-slots__times times--next">
+  {% for ts in time_slots['after'] %}
+  <li class="time">{{ ts['TimeSlot'] + ' after'}}</li>
+  {% endfor %}
+</ol>

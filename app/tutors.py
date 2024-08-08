@@ -70,20 +70,26 @@ def tutor_detail_view(tutor_id: int):
     # availability = [dict(r) for r in db.execute(query, (tutor_id,)).fetchall()]
     # days_available = set(a["DayUTC"] for a in availability)
 
+    #     query = """
+    # SELECT b.TimeSlot, b.BookingID, t.TutorID, t.Name
+    # FROM Bookings b
+    # JOIN TutorAvailability ta on ta.TutorAvailabilityID = b.TutorAvailabilityID
+    # JOIN Tutors t on t.TutorID = ta.TutorID
+    # WHERE t.TutorID = ?
+    # """
+
     query = """
-SELECT b.TimeSlot, b.BookingID, t.TutorID, t.Name
-FROM Bookings b
-JOIN TutorAvailability ta on ta.TutorAvailabilityID = b.TutorAvailabilityID
-JOIN Tutors t on t.TutorID = ta.TutorID
+SELECT t.TutorID, t.Name
+FROM Tutors t
 WHERE t.TutorID = ?
   AND b.IsBooked = 0
 """
     res = db.execute(query, (tutor_id,)).fetchall()
-    time_slots = [{"TimeSlot": r["TimeSlot"], "BookingID": r["BookingID"]} for r in res]
+    # time_slots = [{"TimeSlot": r["TimeSlot"], "BookingID": r["BookingID"]} for r in res]
     tutor = {"Name": res[0]["Name"], "TutorID": res[0]["TutorID"]}
 
     return render_template(
         "hx-tutor-detail.html",
         tutor=tutor,
-        time_slots=time_slots,
+        # time_slots=time_slots,
     )

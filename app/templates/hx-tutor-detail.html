@@ -1,7 +1,17 @@
 {% extends 'layout.html' %} {% block head %}
 <link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/tutor-detail.css" />
 {% endblock %} {% block content %}
-<section class="tutor">
+<section
+  id="tutor"
+  class="tutor"
+  hx-post="{{ url_for('bookings.generate_bookings', tutor_id=tutor['TutorID'])}}"
+  hx-trigger="load"
+  hx-swap="none"
+  hx-vals="js:{'requestTime': formatDateWithTimezone(new Date())}"
+  hx-target="this"
+  onload=""
+>
   <img
     class="tutor__image"
     src="{{ url_for('static', filename='images/Placeholder.jpg') }}"
@@ -11,24 +21,70 @@
 </section>
 <section class="booking">
   <smart-calendar
-    hx-trigger="change delay:1s"
-    hx-on:change="window.selectedDate = new Date(event['detail']['value']).toISOString(); window.tutorID = '{{ tutor.TutorID }}' "
-    hx-target=".time-slots"
-    hx-vals="js:{'selectedDate': window.selectedDate, 'tutorID': window.tutorID}"
-    hx-get="{{ url_for('bookings.get_time_slots')}}"
+    id="calendar"
+    onchange="getSelectedAndSurroundingTimeSlots(event)"
+    selection-mode="one"
+    hide-other-month-days
   ></smart-calendar>
-  <div class="time-slots">
-    <ol class="time-slots__times times--previous"></ol>
-    <ol class="time-slots__times times--selected"></ol>
-    <ol class="time-slots__times times--next"></ol>
-  </div>
+  <div class="time-slots"></div>
 </section>
 <script
   type="module"
   src="{{ url_for('static', filename='js/smart.calendar.js') }}"
 ></script>
-<script
-  type="module"
-  src="{{ url_for('static', filename='js/smart.element.js') }}"
-></script>
+<script>
+  function getSelectedAndSurroundingTimeSlots(event) {
+    const date = new Date(event.detail.value).toISOString();
+    htmx.ajax(
+      'GET',
+      "{{ url_for('bookings.get_time_slots', tutor_id=tutor['TutorID']) }}",
+      { values: { selectedDate: date }, target: '.time-slots' }
+    );
+  }
+
+  function configureCalendar() {
+    const calendar = document.getElementById('calendar');
+    calendar.min = new Date();
+    const thirtyDaysAway = new Date();
+    thirtyDaysAway.setDate(new Date().getDate() + 30);
+    calendar.max = thirtyDaysAway;
+  }
+  document.addEventListener('DOMContentLoaded', configureCalendar);
+
+  document.addEventListener('htmx:afterRequest', function (event) {
+    if (event.detail.target.id === 'tutor') {
+      const response = event.detail.xhr.response;
+      const importantDates = JSON.parse(response);
+      const calendar = document.getElementById('calendar');
+      calendar.importantDates = importantDates;
+    }
+  });
+
+  /**
+   * creates an ISO string including timezone offset
+   */
+  function formatDateWithTimezone(date) {
+    const timezoneOffset = -date.getTimezoneOffset(); // in minutes
+    const offsetHours = Math.floor(Math.abs(timezoneOffset) / 60);
+    const offsetMinutes = Math.abs(timezoneOffset) % 60;
+    const offsetSign = timezoneOffset >= 0 ? '+' : '-';
+    const formattedOffset = `${offsetSign}${String(offsetHours).padStart(
+      2,
+      '0'
+    )}:${String(offsetMinutes).padStart(2, '0')}`;
+
+    const isoDateWithTimezone = `${date.getFullYear()}-${String(
+      date.getMonth() + 1
+    ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(
+      date.getHours()
+    ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(
+      date.getSeconds()
+    ).padStart(2, '0')}.${String(date.getMilliseconds()).padStart(
+      3,
+      '0'
+    )}${formattedOffset}`;
+    console.log(isoDateWithTimezone);
+    return isoDateWithTimezone;
+  }
+</script>
 {% endblock %}

@@ -1,17 +1,12 @@
 from wsgiref.util import request_uri
 from flask import (
     Blueprint,
-<<<<<<< HEAD
     flash,
     jsonify,
     redirect,
     request,
     render_template,
     url_for,
-=======
-    request,
-    render_template,
->>>>>>> 74858d3 (Add booking post and cache fxn)
 )
 from app.database import get_db
 from datetime import datetime, timezone, timedelta
@@ -20,39 +15,22 @@ from datetime import datetime, timezone, timedelta
 bp = Blueprint("bookings", __name__, url_prefix="/bookings")
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 @bp.route("/", methods=["GET"])
 def get_form():
     booking_id = request.args.get("bookingID")
-=======
-@bp.route("/<int:booking_id>", methods=["GET"])
-def submit_booking_view(booking_id):
->>>>>>> 74858d3 (Add booking post and cache fxn)
-=======
-@bp.route("/", methods=["GET"])
-def submit_booking_view():
-    booking_id = request.form.to_dict()["bookingID"]
-    print(booking_id)
->>>>>>> 301372a (Timeslots include BookingID)
     db = get_db()
     query = """
 SELECT b.BookingID,
     b.TimeSlot,
     t.Name AS TutorName,
-<<<<<<< HEAD
     t.Email,
     t.TutorID
-=======
-    t.Email
->>>>>>> 74858d3 (Add booking post and cache fxn)
 FROM Bookings b
     JOIN TutorAvailability ta ON b.TutorAvailabilityID = ta.TutorAvailabilityID
     JOIN Tutors t ON t.TutorID = ta.TutorID
 WHERE b.BookingID = ?
 """
     booking_and_tutor = dict(db.execute(query, (booking_id,)).fetchone())
-<<<<<<< HEAD
     print("ctx: ", booking_and_tutor)
     return render_template("booking_form.html", booking=booking_and_tutor)
 
@@ -77,50 +55,9 @@ WHERE BookingID = ?
     return response
 
 
-=======
-    return render_template("booking_form.html", booking=booking_and_tutor)
-
-
->>>>>>> 74858d3 (Add booking post and cache fxn)
 def map_py_weekday_to_utc_day(weekday: int) -> int:
     PY_TO_UTC = {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 0}
     return PY_TO_UTC[weekday]
-
-
-@bp.route("/time-slots", methods=["GET"])
-def get_time_slots():
-    db = get_db()
-    request_data = request.args
-    selected_date = parse_iso(request_data["selectedDate"])
-    tutor_id = int(request_data["tutorID"])
-
-    # TODO: cache query result in Flask request or q or wherever
-    query = """
-SELECT b.BookingID, b.TimeSlot
-FROM Bookings b
-JOIN TutorAvailability ta ON ta.TutorAvailabilityID = b.TutorAvailabilityID
-JOIN Tutors t ON ta.TutorID = t.TutorID
-WHERE t.TutorID = ?"""
-    bookings = [dict(r) for r in db.execute(query, (tutor_id,)).fetchall()]
-    display_time_slots = [
-        b
-        for b in bookings
-        if in_display_range(selected_date, parse_iso(b.get("TimeSlot")))
-    ]
-    # TODO: decide how to either do mapping here or use Jinja to map to elements.
-    # also actually add the time-slots template
-    return render_template("time-slots.html", time_slots=display_time_slots)
-
-
-def parse_iso(iso_string) -> datetime:
-    if iso_string.endswith("Z"):
-        iso_string = iso_string[:-1] + "+00:00"
-    return datetime.fromisoformat(iso_string)
-
-
-def in_display_range(selected_date: datetime, other_date: datetime) -> bool:
-    difference = selected_date - other_date
-    return difference.days in range(-1, 2)
 
 
 @bp.route("/<tutor_id>/create", methods=["POST"])
@@ -138,7 +75,7 @@ def generate_bookings(tutor_id):
         request_time_iso = request_time_iso[:-1] + "+00:00"
 
     request_date = datetime.fromisoformat(request_time_iso).astimezone(timezone.utc)
-    if cache_hit(tutor_id, request_date):
+    if is_cached(tutor_id, request_date):
         return "cached"
 
     query = """
@@ -189,7 +126,7 @@ def build_booking_entries(request_day: datetime, tutor_availability):
     ]
 
 
-def cache_hit(tutor_id, request_date: datetime):
+def is_cached(tutor_id, request_date: datetime):
     db = get_db()
     get_cached_query = "SELECT LastGenerated FROM BookingsCache WHERE TutorID = ?"
     found_time = db.execute(get_cached_query, (tutor_id,)).fetchone()
