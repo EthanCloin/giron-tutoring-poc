@@ -66,7 +66,7 @@
       </div>
     </div>
     <button
-      hx-get="{{ url_for('bookings.submit_booking_view') }}"
+      hx-get="{{ url_for('bookings.get_form') }}"
       hx-push-url="true"
       hx-target="#modal-placeholder"
       hx-swap="outerHTML"
@@ -91,7 +91,6 @@
       mapTimeSlotsFromDB,
       configureCalendar,
     } from '/static/js/calendar-util.js';
-
     const dbTimeSlots = JSON.parse('{{ db_time_slots | tojson | safe }}');
     console.log(dbTimeSlots);
     window.timeSlots = mapTimeSlotsFromDB(dbTimeSlots);

@@ -5,10 +5,14 @@
       <p class="info__booking-time">{{ booking.TimeSlot }}</p>
     </section>
     <p>Your Contact Info</p>
-    <form class="booking-form">
+    <form
+      class="booking-form"
+      hx-post="{{ url_for('bookings.submit_booking', tutor_id=booking.TutorID, booking_id=booking.BookingID) }}"
+      hx-swap="none"
+    >
       <input required name="first-name" type="text" placeholder="First" />
       <input required name="last-name" type="text" placeholder="Last" />
-      <input required name="email" type="text" placeholder="Email" />
+      <input required name="email" type="email" placeholder="Email" />
       <div class="booking"></div>
       <button type="submit">Cancel</button>
       <button type="submit">Submit</button>
