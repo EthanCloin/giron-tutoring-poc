@@ -40,6 +40,7 @@ FROM Bookings b
 JOIN TutorAvailability ta on ta.TutorAvailabilityID = b.TutorAvailabilityID
 JOIN Tutors t on t.TutorID = ta.TutorID
 WHERE t.TutorID = ?
+  AND b.IsBooked = 0
 """
     res = db.execute(ts_query, (tutor_id,)).fetchall()
     time_slots = [dict(r) for r in res]
@@ -48,6 +49,6 @@ WHERE t.TutorID = ?
         "tutor-detail.html",
         tutor_name=tutor_name,
         tutor_id=int(tutor_id),
-        availability=availability,
         days_available=days_available,
+        db_time_slots=time_slots,
     )

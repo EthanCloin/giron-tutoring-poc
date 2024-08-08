@@ -1,8 +1,12 @@
 from wsgiref.util import request_uri
 from flask import (
     Blueprint,
+    flash,
+    jsonify,
+    redirect,
     request,
     render_template,
+    url_for,
 )
 from app.database import get_db
 from datetime import datetime, timezone, timedelta
@@ -12,22 +16,43 @@ bp = Blueprint("bookings", __name__, url_prefix="/bookings")
 
 
 @bp.route("/", methods=["GET"])
-def submit_booking_view():
-    booking_id = request.form.to_dict()["bookingID"]
-    print(booking_id)
+def get_form():
+    booking_id = request.args.get("bookingID")
     db = get_db()
     query = """
 SELECT b.BookingID,
     b.TimeSlot,
     t.Name AS TutorName,
-    t.Email
+    t.Email,
+    t.TutorID
 FROM Bookings b
     JOIN TutorAvailability ta ON b.TutorAvailabilityID = ta.TutorAvailabilityID
     JOIN Tutors t ON t.TutorID = ta.TutorID
 WHERE b.BookingID = ?
 """
     booking_and_tutor = dict(db.execute(query, (booking_id,)).fetchone())
+    print("ctx: ", booking_and_tutor)
     return render_template("booking_form.html", booking=booking_and_tutor)
+
+
+@bp.route("/<tutor_id>/<booking_id>/submit", methods=["POST"])
+def submit_booking(tutor_id, booking_id):
+    # get form values (i don't even use these rn)
+    # update booking entry to booked
+    print("booking: ", booking_id)
+    db = get_db()
+    query = """
+UPDATE Bookings
+SET IsBooked = 1
+WHERE BookingID = ?
+"""
+    db.execute(query, (booking_id,))
+    db.commit()
+    flash("Booking submitted successfully!")
+    response = jsonify({"location": url_for("home")})
+    response.headers["HX-Redirect"] = url_for("home")
+
+    return response
 
 
 def map_py_weekday_to_utc_day(weekday: int) -> int:
