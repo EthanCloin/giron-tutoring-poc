@@ -3,10 +3,11 @@
 <script src="/static/js/ui-util.js"></script>
 {% endblock %} {% block content %}
 <div class="tutor-list-header">
-  <h1 class="tutor-list-header-heading">herein lies a list of tutors</h1>
+  <h1 class="tutor-list-header-heading">
+    Browse our team of qualified professionals
+  </h1>
   <p class="tutor-list-header-subheading">
-    Get ready to dive deep into the mysteries of the universe with a qualified
-    Physics tutor on Giron.
+    Every tutor has their specialty, find the one who best fits your needs
   </p>
 </div>
 <div class="tutors-wrapper">
@@ -42,7 +43,7 @@
           class="tutors-list__hyperlink"
           href="{{ url_for('tutors.tutor_detail_view', tutor_id=tutor.TutorID)}}"
         >
-          Book a session
+          <button>Book a session</button>
         </a>
       </div>
     </li>

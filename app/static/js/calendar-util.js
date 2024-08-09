@@ -201,6 +201,8 @@ const selectTimeSlot = (event) => {
   }
   PREV_SELECTED_BTN = currBtn;
   window.selectedBookingID = currBtn.dataset.id;
+  let bookingButton = document.getElementById('book-now');
+  bookingButton.disabled = false;
 };
 
 export const configureCalendar = (dbTimeSlots) => {

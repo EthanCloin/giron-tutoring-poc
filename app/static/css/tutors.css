@@ -138,22 +138,20 @@
   align-items: flex-end;
 }
 
-.tutors-list__hyperlink {
-  color: #fff;
-  padding: 3px 15px;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  margin-left: 20px;
-  margin-bottom: 2%;
-  background: var(--secondary-color);
-  cursor: pointer;
-  outline: none;
+.tutors-list__hyperlink button {
+  padding: 0.4rem 1.2rem;
+  margin-top: 4rem;
+  border-radius: 10rem;
+  background: #fff;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--secondary-color);
   transition: 0.3s ease;
-  border: none;
-  text-decoration: none;
+  border: 1.5px solid var(--secondary-color);
+  cursor: pointer;
 }
 
-.tutors-list__hyperlink:hover {
+.tutors-list__hyperlink button:hover {
   color: #fff;
-  background: #0c43aa;
+  background-color: color-mix(in srgb, var(--secondary-color) 80%, #fff);
 }

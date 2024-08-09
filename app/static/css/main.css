@@ -1,6 +1,6 @@
 :root {
   --primary-color: #b5bdc2;
-  --secondary-color: rgb(67, 120, 190);
+  --secondary-color: hsl(205, 75%, 50%);
   --dark-secondary-color: rgb(12, 67, 170);
   --dark-color: #202020f1;
 }
@@ -11,6 +11,14 @@
   box-sizing: border-box;
   font-family: 'Poppins', 'Times New Roman', Times, serif;
   color: var(--dark-color);
+}
+
+/* helps w using rem units on text: 10px = 1rem */
+html {
+  font-size: 62.5%;
+}
+body {
+  font-size: 1.6rem; /* 16px */
 }
 
 main {
@@ -24,11 +32,6 @@ main {
   display: flex;
   justify-content: space-around;
   width: 100%;
-}
-
-.intro-text {
-  width: 60vw;
-  text-align: center;
 }
 
 .flash {

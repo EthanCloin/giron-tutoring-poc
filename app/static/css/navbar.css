@@ -1,13 +1,15 @@
 .navbar {
-  position: relative;
-  left: 0;
-  top: 0;
-  width: 100%;
-  padding: 20px 100px;
+  height: 7vh;
+  width: 100vw;
+  padding-top: 3rem;
+  padding-left: 3rem;
+  padding-right: 5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 99;
+
+  font-size: 1.4rem;
 }
 
 .logo {
@@ -19,7 +21,6 @@
 
 .nav-util {
   position: relative;
-  font-size: 1.1em;
   color: var(--dark-color);
   text-decoration: none;
   font-weight: 500;
@@ -32,19 +33,20 @@
 }
 
 .btnLogin {
-  color: #fff;
-  padding: 3px 15px;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  margin-left: 20px;
-  background: var(--secondary-color);
-  cursor: pointer;
-  outline: none;
+  color: var(--secondary-color);
+  padding: 0.4rem 1.2rem;
+  border-radius: 10rem;
+  margin-left: 2rem;
+  background: #fff;
+  font-size: 1.4rem;
+  font-weight: 500;
   transition: 0.3s ease;
-  border: none;
+  border: 1.5px solid var(--secondary-color);
+  cursor: pointer;
 }
 
 .btnLogin:hover {
   color: #fff;
-  background: var(--dark-secondary-color);
+  background-color: color-mix(in srgb, var(--secondary-color) 80%, #fff);
+  /* background: var(--dark-secondary-color); */
 }

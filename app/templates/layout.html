@@ -21,7 +21,7 @@
   <body>
     {% with messages = get_flashed_messages()%} {% if messages %} {% for msg in
     messages %}
-    <div class="flash" onload="console.log(this.classList)">{{ messages }}</div>
+    <div class="flash">{{ messages }}</div>
     {% endfor %} {% endif %} {% endwith %} {% include 'navbar.html' %}
     <main>{% block content %} {% endblock %}</main>
     {% include 'footer.html' %}

@@ -1,15 +1,17 @@
 <header class="navbar">
-  <img
-    class="logo"
-    src="{{ url_for('static', filename='/images/nextStep-logo.png') }}"
-  />
+  <a href="{{ url_for('home')}}">
+    <img
+      class="logo"
+      src="{{ url_for('static', filename='/images/nextStep-logo.png') }}"
+    />
+  </a>
   <nav class="navigation">
     <a class="nav-util" href="{{ url_for('home')}}">Home</a>
-    <a class="nav-util" href="#">About</a>
+    <!-- <a class="nav-util" href="#">About</a> -->
     <a class="nav-util" href="{{ url_for('tutors.all_tutors_view') }}"
-      >Services</a
+      >Meet Our Team</a
     >
-    <a class="nav-util" href="#">Contact</a>
-    <button class="btnLogin">Login</button>
+    <!-- <a class="nav-util" href="#">Contact</a> -->
+    <button class="btnLogin">Log In</button>
   </nav>
 </header>

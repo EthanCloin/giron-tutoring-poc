@@ -1,11 +1,87 @@
 {% extends 'layout.html' %} {% block content %}
-<div class="intro-text">
-  <h1>Looking for support?</h1>
-  <h2>Let us help you take the Next Step!</h2>
-  <p>Empowering Families and Enabling Educational Flexibility</p>
-  <!-- some nice student pictures -->
-  <a href="{{ url_for('tutors.all_tutors_view')}}">
-    <button>Find a Tutor Now</button>
-  </a>
+<style>
+  .hero {
+    width: 100vw;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10vh;
+  }
+  .headline {
+    width: 60vw;
+    text-align: center;
+  }
+  .headline__text {
+    font-size: 4.8rem;
+    font-weight: 400;
+  }
+  .headline__subtext {
+    font-size: 2rem;
+  }
+  .headline__body {
+    font-size: 1.8rem;
+    width: 50vw;
+    text-align: center;
+  }
+  .underline {
+    text-decoration: underline var(--secondary-color);
+  }
+
+  .call-to-action button {
+    padding: 0.4rem 1.2rem;
+    margin-top: 4rem;
+    border-radius: 10rem;
+    background: #fff;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+    transition: 0.3s ease;
+    border: 1.5px solid var(--secondary-color);
+    cursor: pointer;
+  }
+  .call-to-action button:hover {
+    color: #fff;
+    background-color: color-mix(in srgb, var(--secondary-color) 80%, #fff);
+  }
+</style>
+<section class="hero">
+  <div class="headline">
+    <h1 class="headline__text">
+      Take the <span class="underline">Next Step</span> in Education
+    </h1>
+    <p class="headline__subtext">
+      Elevate your home education experience with support from an expert
+    </p>
+    <a class="call-to-action" href="{{ url_for('tutors.all_tutors_view') }}">
+      <button>Find an Expert Now</button>
+    </a>
+  </div>
+  <p class="headline__body">
+    Whether you want a personalized SAT study plan, or just some help with math,
+    we have an
+    <strong style="color: var(--secondary-color); font-weight: 600"
+      >expert</strong
+    >
+    that's right for you.
+  </p>
+</section>
+<img
+  class="hero-backdrop"
+  src="{{ url_for('static', filename='images/bubbling-test-c.jpg') }}"
+/>
+<div class="attribution">
+  Photo by
+  <a
+    href="https://unsplash.com/@nguyendhn?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+    >Nguyen Dang Hoang Nhu</a
+  >
+  on
+  <a
+    href="https://unsplash.com/photos/person-writing-on-white-paper-qDgTQOYk6B8?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+    >Unsplash</a
+  >
 </div>
+
 {% endblock %}
