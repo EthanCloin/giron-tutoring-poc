@@ -66,11 +66,13 @@
       </div>
     </div>
     <button
+      id="book-now"
       hx-get="{{ url_for('bookings.get_form') }}"
       hx-push-url="true"
       hx-target="#modal-placeholder"
       hx-swap="outerHTML"
       hx-vals="js:{'bookingID': selectedBookingID}"
+      disabled
     >
       Book Now
     </button>
