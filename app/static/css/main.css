@@ -30,3 +30,17 @@ main {
   width: 60vw;
   text-align: center;
 }
+
+.flash {
+  display: block;
+  background-color: #2fdc2f !important;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border: 1px solid black;
+  border-radius: 8px;
+  margin: 16px;
+}
+.hide {
+  display: none;
+}
