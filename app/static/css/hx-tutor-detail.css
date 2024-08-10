@@ -1,31 +1,7 @@
-.time-slots {
+.booking {
   display: flex;
   width: 80vw;
-  gap: 2%;
-}
-
-.time-slot {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 300px;
-  padding: 15px 30px;
-
-  .time {
-    border-radius: 5px;
-    border: 1px solid var(--primary-color);
-    height: 50px;
-    background: #fff;
-    color: var(--secondary-color);
-    text-align: center;
-    padding: 5px 3px;
-    cursor: pointer;
-    transition: border 0.1s ease;
-    font-size: 16px;
-  }
-  .time:hover {
-    border: 1px solid var(--dark-color);
-  }
+  justify-content: space-between;
 }
 
 .time-slot-container {

@@ -1,17 +1,76 @@
 <!-- TODO: add booking_id and link to booking form to each of these -->
 <!-- TODO: add styling -->
-<ol class="time-slots__times times--previous">
-  {% for ts in time_slots['previous'] %}
-  <li class="time">{{ ts['TimeSlot'] + ' prev'}}</li>
-  {% endfor %}
-</ol>
-<ol class="time-slots__times times--selected">
-  {% for ts in time_slots['selected'] %}
-  <li class="time">{{ ts['TimeSlot'] + ' sel'}}</li>
-  {% endfor %}
-</ol>
-<ol class="time-slots__times times--next">
-  {% for ts in time_slots['after'] %}
-  <li class="time">{{ ts['TimeSlot'] + ' after'}}</li>
-  {% endfor %}
-</ol>
+<style>
+  .time-slots {
+    display: flex;
+    width: 80vw;
+    gap: 2%;
+  }
+
+  .time-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    padding: 15px 30px;
+
+    .time {
+      border-radius: 5px;
+      border: 1px solid var(--primary-color);
+      height: 50px;
+      background: #fff;
+      text-align: center;
+      padding: 5px 3px;
+      cursor: pointer;
+      transition: border 0.1s ease;
+      font-size: 16px;
+    }
+    .time:hover {
+      border: 1px solid var(--dark-color);
+    }
+  }
+</style>
+<fieldset class="time-slots">
+  <div class="time-slot time-slot--previous">
+    {% for ts in time_slots['previous'] %}
+    <div class="time">
+      <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
+      <label class="time__label" for="{{ ts['BookingID'] }}"
+        >{{ ts['TimeSlot']}}</label
+      >
+    </div>
+    {% endfor %}
+  </div>
+  <div class="time-slot time-slot--selected">
+    {% for ts in time_slots['selected'] %}
+    <div class="time">
+      <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
+      <label class="time__label" for="{{ ts['BookingID'] }}"
+        >{{ ts['TimeSlot']}}</label
+      >
+    </div>
+    {% endfor %}
+  </div>
+  <div class="time-slot time-slot--next">
+    {% for ts in time_slots['next'] %}
+    <div class="time">
+      <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
+      <label class="time__label" for="{{ ts['BookingID'] }}"
+        >{{ ts['TimeSlot']}}</label
+      >
+    </div>
+    {% endfor %}
+  </div>
+</fieldset>
+<script>
+  document.querySelectorAll('.time__label').forEach((l) => {
+    console.log(l.textContent);
+    l.textContent = new Date(`2000-05-31T${l.textContent}`).toLocaleTimeString(
+      'en-US',
+      {
+        hour: '2-digit',
+        minute: '2-digit',
+      }
+    );
+  });
+</script>
