@@ -1,3 +1,4 @@
+from re import T
 from wsgiref.util import request_uri
 from flask import (
     Blueprint,
@@ -10,9 +11,59 @@ from flask import (
 )
 from app.database import get_db
 from datetime import datetime, timezone, timedelta
+from pprint import pprint
 
 
 bp = Blueprint("bookings", __name__, url_prefix="/bookings")
+
+
+@bp.route("/<tutor_id>/time-slots", methods=["GET"])
+def get_time_slots(tutor_id):
+    db = get_db()
+    request_data = request.args
+    selected_date = parse_iso(request_data["selectedDate"])
+    # TODO: cache query result in Flask request or q or wherever
+    query = """
+SELECT b.BookingID, b.TimeSlot
+FROM Bookings b
+JOIN TutorAvailability ta ON ta.TutorAvailabilityID = b.TutorAvailabilityID
+JOIN Tutors t ON ta.TutorID = t.TutorID
+WHERE t.TutorID = ?"""
+    bookings = [dict(r) for r in db.execute(query, (tutor_id,)).fetchall()]
+    bookings = [
+        b
+        for b in bookings
+        if in_display_range(selected_date, parse_iso(b.get("TimeSlot")))
+    ]
+
+    mapped = {"previous": [], "selected": [], "next": []}
+
+    for b in bookings:
+        date = parse_iso(b.get("TimeSlot")).date()
+        if date == selected_date.date():
+            mapped["selected"].append(
+                {k: parse_iso(v).timetz() for k, v in b.items() if k == "TimeSlot"}
+            )
+        elif date == selected_date.date() - timedelta(days=1):
+            mapped["previous"].append(
+                {k: parse_iso(v).timetz() for k, v in b.items() if k == "TimeSlot"}
+            )
+        elif date == selected_date.date() + timedelta(days=1):
+            mapped["next"].append(
+                {k: parse_iso(v).timetz() for k, v in b.items() if k == "TimeSlot"}
+            )
+    return render_template("time-slots.html", time_slots=mapped)
+
+
+def in_display_range(selected_date: datetime, other_date: datetime) -> bool:
+    difference = abs(selected_date.date() - other_date.date())
+    return difference.days <= 1
+
+
+def parse_iso(iso_string) -> datetime:
+    if iso_string.endswith("Z"):
+        iso_string = iso_string[:-1] + "+00:00"
+    return datetime.fromisoformat(iso_string)
 
 
 @bp.route("/", methods=["GET"])
@@ -31,7 +82,6 @@ FROM Bookings b
 WHERE b.BookingID = ?
 """
     booking_and_tutor = dict(db.execute(query, (booking_id,)).fetchone())
-    print("ctx: ", booking_and_tutor)
     return render_template("booking_form.html", booking=booking_and_tutor)
 
 
@@ -39,7 +89,6 @@ WHERE b.BookingID = ?
 def submit_booking(tutor_id, booking_id):
     # get form values (i don't even use these rn)
     # update booking entry to booked
-    print("booking: ", booking_id)
     db = get_db()
     query = """
 UPDATE Bookings

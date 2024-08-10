@@ -1,6 +1,6 @@
 {% extends 'layout.html' %} {% block head %}
 <link rel="stylesheet" type="text/css" href="/static/css/smart.default.css" />
-<link rel="stylesheet" type="text/css" href="/static/css/tutor-detail.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/hx-tutor-detail.css" />
 {% endblock %} {% block content %}
 <section
   id="tutor"
@@ -10,7 +10,6 @@
   hx-swap="none"
   hx-vals="js:{'requestTime': formatDateWithTimezone(new Date())}"
   hx-target="this"
-  onload=""
 >
   <img
     class="tutor__image"
@@ -22,9 +21,9 @@
 <section class="booking">
   <smart-calendar
     id="calendar"
-    onchange="getSelectedAndSurroundingTimeSlots(event)"
     selection-mode="one"
     hide-other-month-days
+    onchange="getSelectedAndSurroundingTimeSlots(event)"
   ></smart-calendar>
   <div class="time-slots"></div>
 </section>
@@ -34,11 +33,14 @@
 ></script>
 <script>
   function getSelectedAndSurroundingTimeSlots(event) {
-    const date = new Date(event.detail.value).toISOString();
+    const date = formatDateWithTimezone(new Date(event.detail.value));
     htmx.ajax(
       'GET',
       "{{ url_for('bookings.get_time_slots', tutor_id=tutor['TutorID']) }}",
-      { values: { selectedDate: date }, target: '.time-slots' }
+      {
+        values: { selectedDate: date },
+        target: '.time-slots',
+      }
     );
   }
 
@@ -51,14 +53,17 @@
   }
   document.addEventListener('DOMContentLoaded', configureCalendar);
 
-  document.addEventListener('htmx:afterRequest', function (event) {
-    if (event.detail.target.id === 'tutor') {
-      const response = event.detail.xhr.response;
-      const importantDates = JSON.parse(response);
-      const calendar = document.getElementById('calendar');
-      calendar.importantDates = importantDates;
+  document.addEventListener(
+    'htmx:afterRequest',
+    function updateImportantDates(event) {
+      if (event.detail.target.id === 'tutor') {
+        const response = event.detail.xhr.response;
+        const importantDates = JSON.parse(response);
+        const calendar = document.getElementById('calendar');
+        calendar.importantDates = importantDates;
+      }
     }
-  });
+  );
 
   /**
    * creates an ISO string including timezone offset
