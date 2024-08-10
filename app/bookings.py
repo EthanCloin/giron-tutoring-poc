@@ -22,6 +22,11 @@ def get_time_slots(tutor_id):
     db = get_db()
     request_data = request.args
     selected_date = parse_iso(request_data["selectedDate"])
+    dates = {
+        "previous": selected_date.date() - timedelta(days=1),
+        "selected": selected_date.date(),
+        "next": selected_date.date() + timedelta(days=1),
+    }
     # TODO: cache query result in Flask request or q or wherever
     query = """
 SELECT b.BookingID, b.TimeSlot
@@ -35,9 +40,19 @@ WHERE t.TutorID = ?"""
         for b in bookings
         if in_display_range(selected_date, parse_iso(b.get("TimeSlot")))
     ]
+    return render_template(
+        "time-slots.html",
+        time_slots=map_bookings_to_time_slots(bookings, selected_date),
+        dates=dates,
+    )
 
-    mapped = {"previous": [], "selected": [], "next": []}
 
+def map_bookings_to_time_slots(bookings, selected_date):
+    mapped = {
+        "previous": [],
+        "selected": [],
+        "next": [],
+    }
     for b in bookings:
         date = parse_iso(b.get("TimeSlot")).date()
         if date == selected_date.date():
@@ -52,7 +67,8 @@ WHERE t.TutorID = ?"""
             mapped["next"].append(
                 {k: parse_iso(v).timetz() for k, v in b.items() if k == "TimeSlot"}
             )
-    return render_template("time-slots.html", time_slots=mapped)
+
+    return mapped
 
 
 def in_display_range(selected_date: datetime, other_date: datetime) -> bool:

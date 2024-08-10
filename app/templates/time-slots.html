@@ -32,44 +32,49 @@
 </style>
 <fieldset class="time-slots">
   <div class="time-slot time-slot--previous">
+    <p class="time-slot__date">{{ dates['previous'] }}</p>
     {% for ts in time_slots['previous'] %}
-    <div class="time">
+    <label class="time">
       <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
-      <label class="time__label" for="{{ ts['BookingID'] }}"
-        >{{ ts['TimeSlot']}}</label
-      >
-    </div>
+      <p class="time__label">{{ ts['TimeSlot']}}</p>
+    </label>
     {% endfor %}
   </div>
   <div class="time-slot time-slot--selected">
+    <p class="time-slot__date">{{ dates['selected'] }}</p>
     {% for ts in time_slots['selected'] %}
-    <div class="time">
+    <label class="time">
       <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
-      <label class="time__label" for="{{ ts['BookingID'] }}"
-        >{{ ts['TimeSlot']}}</label
-      >
-    </div>
+      <p class="time__label">{{ ts['TimeSlot']}}</p>
+    </label>
     {% endfor %}
   </div>
   <div class="time-slot time-slot--next">
+    <p class="time-slot__date">{{ dates['next'] }}</p>
     {% for ts in time_slots['next'] %}
-    <div class="time">
+    <label class="time">
       <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
-      <label class="time__label" for="{{ ts['BookingID'] }}"
-        >{{ ts['TimeSlot']}}</label
-      >
-    </div>
+      <p class="time__label">{{ ts['TimeSlot']}}</p>
+    </label>
     {% endfor %}
   </div>
 </fieldset>
 <script>
   document.querySelectorAll('.time__label').forEach((l) => {
-    console.log(l.textContent);
     l.textContent = new Date(`2000-05-31T${l.textContent}`).toLocaleTimeString(
       'en-US',
       {
         hour: '2-digit',
         minute: '2-digit',
+      }
+    );
+  });
+  document.querySelectorAll('.time-slot__date').forEach((d) => {
+    d.textContent = new Date(d.textContent + 'T00:00:00').toLocaleDateString(
+      'en-US',
+      {
+        month: 'short',
+        day: '2-digit',
       }
     );
   });
