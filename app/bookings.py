@@ -8,6 +8,7 @@ from flask import (
     request,
     render_template,
     url_for,
+    session,
 )
 from app.database import get_db
 from datetime import datetime, timezone, timedelta
@@ -21,13 +22,41 @@ bp = Blueprint("bookings", __name__, url_prefix="/bookings")
 def get_time_slots(tutor_id):
     db = get_db()
     request_data = request.args
-    selected_date = parse_iso(request_data["selectedDate"])
+    # TODO: i could probably get the info i need by passing in or keeping a client timezone
+    # cookie instead of always using js on the client to format a specific date
+    selected_date = parse_iso(request_data.get("selectedDate"))
+    selected_booking_id = int(request_data.get("bookingID", 0))
+
+    if not selected_date:
+        print(" we cached as hell babe ")
+        return render_template(
+            "time-slots.html",
+            selected_booking_id=selected_booking_id,
+            tutor_id=tutor_id,
+            time_slots=session.get("cached_time_slots"),
+            dates=session.get("cached_dates"),
+        )
+    is_cached = str(selected_date.date()) == session.get("cached_request_date")
+    print(
+        f"selected {str(selected_date.date())} is not the same as {session.get('cached_request_date')}"
+    )
+    if is_cached:
+        print(" we cached as hell babe ")
+        # TODO: swap this pointless rerender with some status code that says hey don't do anything
+        # just leave the page as is. or maybe some hx-header?
+        return render_template(
+            "time-slots.html",
+            selected_booking_id=selected_booking_id,
+            tutor_id=tutor_id,
+            time_slots=session.get("cached_time_slots"),
+            dates=session.get("cached_dates"),
+        )
     dates = {
-        "previous": selected_date.date() - timedelta(days=1),
-        "selected": selected_date.date(),
-        "next": selected_date.date() + timedelta(days=1),
+        "previous": str(selected_date.date() - timedelta(days=1)),
+        "selected": str(selected_date.date()),
+        "next": str(selected_date.date() + timedelta(days=1)),
     }
-    # TODO: cache query result in Flask request or q or wherever
+
     query = """
 SELECT b.BookingID, b.TimeSlot
 FROM Bookings b
@@ -40,10 +69,18 @@ WHERE t.TutorID = ?"""
         for b in bookings
         if in_display_range(selected_date, parse_iso(b.get("TimeSlot")))
     ]
+    time_slots = map_bookings_to_time_slots(bookings, selected_date)
+    session.update({"cached_time_slots": time_slots})
+    session.update({"cached_dates": dates})
+    session.update({"cached_request_date": str(selected_date.date())})
+
     return render_template(
         "time-slots.html",
-        time_slots=map_bookings_to_time_slots(bookings, selected_date),
+        time_slots=time_slots,
         dates=dates,
+        selected_booking_id=selected_booking_id,
+        selected_date=str(selected_date.date()),
+        tutor_id=tutor_id,
     )
 
 
@@ -56,17 +93,14 @@ def map_bookings_to_time_slots(bookings, selected_date):
     for b in bookings:
         date = parse_iso(b.get("TimeSlot")).date()
         if date == selected_date.date():
-            mapped["selected"].append(
-                {k: parse_iso(v).timetz() for k, v in b.items() if k == "TimeSlot"}
-            )
+            mapped["selected"].append(b)
+            b.update({"TimeSlot": str(parse_iso(b.get("TimeSlot")).timetz())})
         elif date == selected_date.date() - timedelta(days=1):
-            mapped["previous"].append(
-                {k: parse_iso(v).timetz() for k, v in b.items() if k == "TimeSlot"}
-            )
+            mapped["previous"].append(b)
+            b.update({"TimeSlot": str(parse_iso(b.get("TimeSlot")).timetz())})
         elif date == selected_date.date() + timedelta(days=1):
-            mapped["next"].append(
-                {k: parse_iso(v).timetz() for k, v in b.items() if k == "TimeSlot"}
-            )
+            mapped["next"].append(b)
+            b.update({"TimeSlot": str(parse_iso(b.get("TimeSlot")).timetz())})
 
     return mapped
 
@@ -76,7 +110,9 @@ def in_display_range(selected_date: datetime, other_date: datetime) -> bool:
     return difference.days <= 1
 
 
-def parse_iso(iso_string) -> datetime:
+def parse_iso(iso_string) -> datetime | None:
+    if not iso_string:
+        return None
     if iso_string.endswith("Z"):
         iso_string = iso_string[:-1] + "+00:00"
     return datetime.fromisoformat(iso_string)

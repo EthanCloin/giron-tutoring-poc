@@ -1,65 +1,124 @@
 <!-- TODO: add booking_id and link to booking form to each of these -->
 <!-- TODO: add styling -->
 <style>
-  .time-slots {
+  .time-slots-table {
     display: flex;
-    width: 80vw;
+    width: 60vw;
     gap: 2%;
+    justify-content: space-evenly;
   }
 
-  .time-slot {
+  .time-slots-column {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 300px;
+    width: 20rem;
     padding: 15px 30px;
+  }
+  .time-slot {
+    border-radius: 5px;
+    border: 1px solid var(--primary-color);
+    height: 50px;
+    background: #fff;
+    text-align: center;
+    padding: 5px 3px;
+    cursor: pointer;
+    transition: border 0.1s ease;
+    font-size: 16px;
 
-    .time {
-      border-radius: 5px;
-      border: 1px solid var(--primary-color);
-      height: 50px;
-      background: #fff;
-      text-align: center;
-      padding: 5px 3px;
-      cursor: pointer;
-      transition: border 0.1s ease;
-      font-size: 16px;
-    }
-    .time:hover {
-      border: 1px solid var(--dark-color);
+    input {
+      display: none;
     }
   }
+
+  .time-slot:hover {
+    border: 1px solid var(--dark-color);
+  }
+
+  .time-slot .--clicked {
+    display: flex;
+  }
 </style>
-<fieldset class="time-slots">
-  <div class="time-slot time-slot--previous">
-    <p class="time-slot__date">{{ dates['previous'] }}</p>
-    {% for ts in time_slots['previous'] %}
-    <label class="time">
-      <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
-      <p class="time__label">{{ ts['TimeSlot']}}</p>
-    </label>
-    {% endfor %}
+<!-- format fxn expected from tutor-detail page -->
+<fieldset class="time-slots-table">
+  <div class="time-slots-column">
+    <p class="time-slots__date">{{ dates['previous'] }}</p>
+    {% for ts in time_slots['previous'] %} {% if ts['BookingID'] ==
+    selected_booking_id %}
+    <div class="time-slot --clicked">
+      <label class="time-slot__time">
+        <input type="radio" id="{{ ts['BookingID'] }}" />
+        <p class="time__label">{{ ts['TimeSlot']}}</p>
+      </label>
+      <button class="booking-button">Book Now</button>
+    </div>
+    {% else %}
+    <div
+      class="time-slot"
+      hx-get="{{ url_for('bookings.get_time_slots', bookingID=ts['BookingID'], tutor_id=tutor_id, selectedDate=selected_date) }}"
+      hx-target="closest fieldset"
+      hx-swap="outerHTML"
+    >
+      <label class="time-slot__time">
+        <input type="radio" id="{{ ts['BookingID'] }}" />
+        <p class="time__label">{{ ts['TimeSlot']}}</p>
+      </label>
+    </div>
+    {% endif %} {% endfor %}
   </div>
-  <div class="time-slot time-slot--selected">
-    <p class="time-slot__date">{{ dates['selected'] }}</p>
-    {% for ts in time_slots['selected'] %}
-    <label class="time">
-      <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
-      <p class="time__label">{{ ts['TimeSlot']}}</p>
-    </label>
-    {% endfor %}
+  <div class="time-slots-column">
+    <p class="time-slots__date">{{ dates['selected'] }}</p>
+    {% for ts in time_slots['selected'] %} {% if ts['BookingID'] ==
+    selected_booking_id %}
+    <div class="time-slot --clicked">
+      <label class="time-slot__time">
+        <input type="radio" id="{{ ts['BookingID'] }}" />
+        <p class="time__label">{{ ts['TimeSlot']}}</p>
+      </label>
+      <button class="booking-button">Book Now</button>
+    </div>
+    {% else %}
+    <div
+      class="time-slot"
+      hx-get="{{ url_for('bookings.get_time_slots', bookingID=ts['BookingID'], tutor_id=tutor_id, selectedDate=selected_date) }}"
+      hx-target="closest fieldset"
+      hx-swap="outerHTML"
+    >
+      <label class="time-slot__time">
+        <input type="radio" id="{{ ts['BookingID'] }}" />
+        <p class="time__label">{{ ts['TimeSlot']}}</p>
+      </label>
+    </div>
+    {% endif %}{% endfor %}
   </div>
-  <div class="time-slot time-slot--next">
-    <p class="time-slot__date">{{ dates['next'] }}</p>
-    {% for ts in time_slots['next'] %}
-    <label class="time">
-      <input type="radio" id="{{ ts['BookingID'] }}" name="time-slot" />
-      <p class="time__label">{{ ts['TimeSlot']}}</p>
-    </label>
-    {% endfor %}
+  <div class="time-slots-column">
+    <p class="time-slots__date">{{ dates['next'] }}</p>
+    {% for ts in time_slots['next'] %}{% if ts['BookingID'] ==
+    selected_booking_id %}
+    <div class="time-slot --clicked">
+      <label class="time-slot__time">
+        <input type="radio" id="{{ ts['BookingID'] }}" />
+        <p class="time__label">{{ ts['TimeSlot']}}</p>
+      </label>
+      <button class="booking-button">Book Now</button>
+    </div>
+    {% else %}
+    <div
+      class="time-slot"
+      hx-get="{{ url_for('bookings.get_time_slots', bookingID=ts['BookingID'], tutor_id=tutor_id, selectedDate=selected_date) }}"
+      hx-target="closest fieldset"
+      hx-swap="outerHTML"
+    >
+      <label class="time-slot__time">
+        <input type="radio" id="{{ ts['BookingID'] }}" />
+        <p class="time__label">{{ ts['TimeSlot']}}</p>
+      </label>
+    </div>
+    {% endif %} {% endfor %}
   </div>
 </fieldset>
 <script>
+  // localize times and dates to client
   document.querySelectorAll('.time__label').forEach((l) => {
     l.textContent = new Date(`2000-05-31T${l.textContent}`).toLocaleTimeString(
       'en-US',
@@ -69,7 +128,7 @@
       }
     );
   });
-  document.querySelectorAll('.time-slot__date').forEach((d) => {
+  document.querySelectorAll('.time-slots__date').forEach((d) => {
     d.textContent = new Date(d.textContent + 'T00:00:00').toLocaleDateString(
       'en-US',
       {
@@ -78,4 +137,15 @@
       }
     );
   });
+
+  //  document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+  //    radio.addEventListener('change', function () {
+  //      document.querySelectorAll('.time').forEach((label) => {
+  //        label.classList.remove('time--selected'); // Remove checked class from all labels
+  //      });
+  //      if (radio.checked) {
+  //        radio.parentElement.classList.add('time--selected'); // Add checked class to the selected label
+  //      }
+  //    });
+  //  });
 </script>
