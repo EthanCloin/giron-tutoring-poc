@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 20rem;
+    width: 25rem;
     padding: 15px 30px;
   }
   .time-slot {
@@ -24,6 +24,8 @@
     padding: 5px 3px;
     cursor: pointer;
     transition: border 0.1s ease;
+    transition: color 0.8s ease;
+
     font-size: 16px;
 
     input {
@@ -35,8 +37,19 @@
     border: 1px solid var(--dark-color);
   }
 
-  .time-slot .--clicked {
+  .time-slot.--clicked {
+    /* TODO: figure out how to make a smooth transition where the label moves over and the button slides in */
+    /* transition-duration: 1000ms; */
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .time-slot__time {
+      width: 50%;
+    }
+    .booking-button {
+      width: 50%;
+    }
   }
 </style>
 <!-- format fxn expected from tutor-detail page -->
@@ -50,7 +63,14 @@
         <input type="radio" id="{{ ts['BookingID'] }}" />
         <p class="time__label">{{ ts['TimeSlot']}}</p>
       </label>
-      <button class="booking-button">Book Now</button>
+      <button
+        hx-get="{{ url_for('bookings.get_form', booking_id=ts['BookingID']) }}"
+        hx-target="closest fieldset"
+        hx-swap="outerHTML"
+        class="booking-button"
+      >
+        Book Now
+      </button>
     </div>
     {% else %}
     <div
@@ -75,7 +95,14 @@
         <input type="radio" id="{{ ts['BookingID'] }}" />
         <p class="time__label">{{ ts['TimeSlot']}}</p>
       </label>
-      <button class="booking-button">Book Now</button>
+      <button
+        hx-get="{{ url_for('bookings.get_form', booking_id=ts['BookingID']) }}"
+        hx-target="closest fieldset"
+        hx-swap="outerHTML"
+        class="booking-button"
+      >
+        Book Now
+      </button>
     </div>
     {% else %}
     <div
@@ -100,7 +127,14 @@
         <input type="radio" id="{{ ts['BookingID'] }}" />
         <p class="time__label">{{ ts['TimeSlot']}}</p>
       </label>
-      <button class="booking-button">Book Now</button>
+      <button
+        hx-get="{{ url_for('bookings.get_form', booking_id=ts['BookingID']) }}"
+        hx-target="closest fieldset"
+        hx-swap="outerHTML"
+        class="booking-button"
+      >
+        Book Now
+      </button>
     </div>
     {% else %}
     <div
