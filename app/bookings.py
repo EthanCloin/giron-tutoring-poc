@@ -28,7 +28,7 @@ def get_time_slots(tutor_id):
     selected_booking_id = int(request_data.get("bookingID", 0))
 
     if not selected_date:
-        print(" we cached as hell babe ")
+        print("no date selected, use session cache")
         return render_template(
             "time-slots.html",
             selected_booking_id=selected_booking_id,
@@ -37,11 +37,8 @@ def get_time_slots(tutor_id):
             dates=session.get("cached_dates"),
         )
     is_cached = str(selected_date.date()) == session.get("cached_request_date")
-    print(
-        f"selected {str(selected_date.date())} is not the same as {session.get('cached_request_date')}"
-    )
     if is_cached:
-        print(" we cached as hell babe ")
+        print("cached in session")
         # TODO: swap this pointless rerender with some status code that says hey don't do anything
         # just leave the page as is. or maybe some hx-header?
         return render_template(
@@ -62,7 +59,9 @@ SELECT b.BookingID, b.TimeSlot
 FROM Bookings b
 JOIN TutorAvailability ta ON ta.TutorAvailabilityID = b.TutorAvailabilityID
 JOIN Tutors t ON ta.TutorID = t.TutorID
-WHERE t.TutorID = ?"""
+WHERE t.TutorID = ?
+    AND b.IsBooked = 0
+"""
     bookings = [dict(r) for r in db.execute(query, (tutor_id,)).fetchall()]
     bookings = [
         b
@@ -70,6 +69,7 @@ WHERE t.TutorID = ?"""
         if in_display_range(selected_date, parse_iso(b.get("TimeSlot")))
     ]
     time_slots = map_bookings_to_time_slots(bookings, selected_date)
+
     session.update({"cached_time_slots": time_slots})
     session.update({"cached_dates": dates})
     session.update({"cached_request_date": str(selected_date.date())})
@@ -164,19 +164,31 @@ def map_py_weekday_to_utc_day(weekday: int) -> int:
 def generate_bookings(tutor_id):
     """accept the tutoravailability data and return 30 days worth of time slots"""
 
-    # TODO: support override dates
-    # TODO: solve the timezone bug throwing off dates in default availability ISSUE #6
-    # https://blogs.oracle.com/javamagazine/post/java-timezone-part-1
-    # plan: generate this based on client request which includes request date and
-    # and cache unless updated by tutor
+    # TODO: cache unless request_date changes
     db = get_db()
     request_time_iso = request.form.to_dict()["requestTime"]
     if request_time_iso.endswith("Z"):
         request_time_iso = request_time_iso[:-1] + "+00:00"
 
     request_date = datetime.fromisoformat(request_time_iso).astimezone(timezone.utc)
-    if is_cached(tutor_id, request_date):
-        return "cached"
+    if bookings_already_generated(tutor_id, request_date):
+        print("GETTING EXISTING BOOKINGS")
+        query = """
+SELECT b.TimeSlot
+FROM Bookings b
+JOIN TutorAvailability ta ON ta.TutorAvailabilityID = b.TutorAvailabilityID
+JOIN Tutors t ON ta.TutorID = t.TutorID
+WHERE t.TutorID = ?
+    AND b.IsBooked = 0
+"""
+        bookings = [dict(b) for b in db.execute(query, tutor_id).fetchall()]
+        available_days = set()
+        for b in bookings:
+            date = parse_iso(b.get("TimeSlot")).date()
+            date = f"{date.year}-{date.month}-{date.day}"
+            available_days.add(date)
+
+        return jsonify(list(available_days))
 
     query = """
 SELECT TutorAvailabilityID, DayUTC, TimeUTC
@@ -185,14 +197,19 @@ WHERE TutorID = ?"""
     tutor_availability = [dict(ta) for ta in db.execute(query, (tutor_id,)).fetchall()]
 
     bookings = build_booking_entries(request_date, tutor_availability)
-
     db.executemany(
         "INSERT INTO Bookings (TutorAvailabilityID, TimeSlot) VALUES (?, ?)", bookings
     )
     db.commit()
-    cache_bookings(tutor_id, request_date)
+    mark_bookings_generated(tutor_id, request_date)
 
-    return "success"
+    available_days = set()
+    for b in bookings:
+        # second tuple index is timeslot
+        date = parse_iso(b[1]).date()
+        date = f"{date.year}-{date.month}-{date.day}"
+        available_days.add(date)
+    return jsonify(list(available_days))
 
 
 def build_booking_entries(request_day: datetime, tutor_availability):
@@ -226,7 +243,7 @@ def build_booking_entries(request_day: datetime, tutor_availability):
     ]
 
 
-def is_cached(tutor_id, request_date: datetime):
+def bookings_already_generated(tutor_id, request_date: datetime):
     db = get_db()
     get_cached_query = "SELECT LastGenerated FROM BookingsCache WHERE TutorID = ?"
     found_time = db.execute(get_cached_query, (tutor_id,)).fetchone()
@@ -238,7 +255,7 @@ def is_cached(tutor_id, request_date: datetime):
         return found_time.date() == request_date.date()
 
 
-def cache_bookings(tutor_id, request_date: datetime):
+def mark_bookings_generated(tutor_id, request_date: datetime):
     db = get_db()
     insert_query = (
         "INSERT OR REPLACE INTO BookingsCache (TutorID, LastGenerated) VALUES (?, ?)"
