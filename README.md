@@ -1,8 +1,15 @@
 # Summary
 
-minimal website to demonstrate options for tutoring booking
+webapp for booking an appointment with a tutor.
+built primarily using HTMX and Python.
 
-## Quickstart
+
+## Quickstart (MacOS)
+1. Create and activate a virtual environment in the root directory using `venv`
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
 run the app.py file via CLI using 
 ```bash 
 flask --app app init-db # *
@@ -10,22 +17,21 @@ flask --app app run --debug
 ```
 *\*init-db command only needs run on intial setup, or if you want to reset the db contents*
 
-## Google Calendar Appointment Scheduling Embed
 
-everything you need except payments, direct integration by Google with Google Calendar
+## Project State
+refer to the repository Issues 
 
-$10/month for multiple booking schedules
+current goal is to upgrade this to look prettier, utilize HTMX more effectively, Dockerize and deploy on fly.io
+
 
 ## Smart Calendar opensource webcomponent
-
-Using the smart calendar means essentially rebuilding the Google embed ourselves.
-Upfront development cost and reduced feature set to avoid subscription lockin.
-
-I am pulling the specific files i need out of node_modules and putting them into the static directory
-for the flask server! this addressed a problem where the calendar disappeared after including the flask server
-layer and as a side effect should decrease the size of the relevant js bundle
+this was the fastest way for me to get a calendar element on the page. may refactor to use something
+different because it's rather annoying to work with. consider doing a Calendly integration too
 
 # Reference
+## HTMX
+- https://htmx.org
+
 ## flask docs
 - https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 - https://jinja.palletsprojects.com/en/3.0.x/templates/
