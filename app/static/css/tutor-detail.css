@@ -1,185 +1,55 @@
-.booking-wrapper {
+.booking {
   display: flex;
   width: 80vw;
   justify-content: space-between;
 }
-
-#modal-placeholder {
-  display: none;
-}
-
-.main-contents {
+.time-slots-table {
   display: flex;
-  flex-direction: column;
-  padding: 2% 5.4%;
-}
-
-/* Row 1 */
-.booking-tutor-wrapper {
-  display: flex;
-  position: relative;
-  flex-direction: row;
-  gap: 30px;
-  margin-bottom: 5%;
-}
-
-.booking-tutor-wrapper::after {
-  content: '';
-  position: absolute;
-  bottom: -30px;
-  width: calc(50% + 230px);
-  height: 4px;
-  background: var(--secondary-color);
-}
-
-.booking-tutor__image {
-  width: 200px;
-  /* Temporary border for spacing */
-  border: 1px solid var(--dark-color);
-}
-
-.booking-tutor-info-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  width: 50%;
-  gap: 4%;
-}
-
-/* Row 2 */
-
-.time-slots {
-  display: flex;
-  width: 80vw;
+  width: 60vw;
   gap: 2%;
+  justify-content: space-evenly;
 }
 
-.time-slot {
+.time-slots-column {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 300px;
+  width: 25rem;
   padding: 15px 30px;
 }
-
-.time-slot-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid var(--primary-color);
-  padding: 5px 2px;
-  border-radius: 10px;
-}
-
-.time-slot-container-selected {
-  border: 2px solid var(--secondary-color);
-}
-
-.time-slot__time {
+.time-slot {
   border-radius: 5px;
   border: 1px solid var(--primary-color);
   height: 50px;
   background: #fff;
-  color: var(--secondary-color);
   text-align: center;
   padding: 5px 3px;
   cursor: pointer;
   transition: border 0.1s ease;
+  transition: color 0.8s ease;
+
   font-size: 16px;
+
+  input {
+    display: none;
+  }
 }
 
-.time-slot__time:hover {
+.time-slot:hover {
   border: 1px solid var(--dark-color);
 }
 
-.time-slot__time-toggled {
-  background: var(--secondary-color);
-  border: 1px solid var(--secondary-color);
-  color: #fff;
-}
-
-.time-slot__time-toggled:hover {
-  border: 1px solid var(--secondary-color);
-}
-
-.time-slot__empty {
-  display: inline-flex;
+.time-slot.--clicked {
+  /* TODO: figure out how to make a smooth transition where the label moves over and the button slides in */
+  /* transition-duration: 1000ms; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 50px;
-}
-
-.time-slot__empty svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* Example CSS to style a calendar component */
-
-/* General calendar container */
-smart-calendar {
-  border: 1px solid #ccc; /* Add a border */
-  border-radius: 10px; /* Rounded corners */
-  overflow: hidden; /* Ensure content fits within the border */
-}
-
-/* Calendar header (e.g., month/year) */
-smart-calendar .header {
-  background-color: #f5f5f5; /* Light gray background */
-  color: #333; /* Dark text color */
-  padding: 10px; /* Add some padding */
-  font-weight: bold; /* Bold text */
-}
-
-/* Navigation buttons (previous/next month) */
-smart-calendar .nav-buttons {
-  display: flex; /* Flex container for buttons */
-  justify-content: space-between; /* Space out buttons */
-}
-
-smart-calendar .nav-buttons button {
-  background-color: #4378be; /* Primary color */
-  color: white; /* White text */
-  border: none; /* Remove default border */
-  padding: 5px 10px; /* Add padding */
-  cursor: pointer; /* Pointer cursor on hover */
-}
-
-smart-calendar .nav-buttons button:hover {
-  background-color: #365a9a; /* Darker shade on hover */
-}
-
-/* Days of the week */
-smart-calendar .days-of-week {
-  background-color: #e0e0e0; /* Light gray background */
-  color: #555; /* Darker text color */
-  padding: 5px; /* Padding around day names */
-}
-
-/* Individual days */
-smart-calendar .day {
-  display: inline-block; /* Inline-block for days */
-  width: 2rem; /* Fixed width for days */
-  height: 2rem; /* Fixed height for days */
-  line-height: 2rem; /* Center text vertically */
-  text-align: center; /* Center text horizontally */
-  margin: 2px; /* Space between days */
-  cursor: pointer; /* Pointer cursor on hover */
-}
-
-smart-calendar .day.selected {
-  background-color: #4378be; /* Primary color for selected day */
-  color: white; /* White text for selected day */
-}
-
-smart-calendar .day:hover {
-  background-color: #d0e0f0; /* Light blue background on hover */
-}
-
-/* Restricted dates or special markers */
-smart-calendar .day.restricted {
-  background-color: #f5f5f5; /* Gray background for restricted dates */
-  color: #999; /* Lighter text color */
-  text-decoration: line-through; /* Strikethrough for restricted dates */
+  .time-slot__time {
+    width: 50%;
+  }
+  .booking-button {
+    width: 50%;
+  }
 }

@@ -1,58 +1,4 @@
-<!-- TODO: add booking_id and link to booking form to each of these -->
-<!-- TODO: add styling -->
-<style>
-  .time-slots-table {
-    display: flex;
-    width: 60vw;
-    gap: 2%;
-    justify-content: space-evenly;
-  }
-
-  .time-slots-column {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 25rem;
-    padding: 15px 30px;
-  }
-  .time-slot {
-    border-radius: 5px;
-    border: 1px solid var(--primary-color);
-    height: 50px;
-    background: #fff;
-    text-align: center;
-    padding: 5px 3px;
-    cursor: pointer;
-    transition: border 0.1s ease;
-    transition: color 0.8s ease;
-
-    font-size: 16px;
-
-    input {
-      display: none;
-    }
-  }
-
-  .time-slot:hover {
-    border: 1px solid var(--dark-color);
-  }
-
-  .time-slot.--clicked {
-    /* TODO: figure out how to make a smooth transition where the label moves over and the button slides in */
-    /* transition-duration: 1000ms; */
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    .time-slot__time {
-      width: 50%;
-    }
-    .booking-button {
-      width: 50%;
-    }
-  }
-</style>
-<!-- format fxn expected from tutor-detail page -->
+<!-- format fxn and styles expected from tutor-detail page -->
 <fieldset class="time-slots-table">
   <div class="time-slots-column">
     <p class="time-slots__date">{{ dates['previous'] }}</p>
@@ -171,15 +117,4 @@
       }
     );
   });
-
-  //  document.querySelectorAll('input[type="radio"]').forEach((radio) => {
-  //    radio.addEventListener('change', function () {
-  //      document.querySelectorAll('.time').forEach((label) => {
-  //        label.classList.remove('time--selected'); // Remove checked class from all labels
-  //      });
-  //      if (radio.checked) {
-  //        radio.parentElement.classList.add('time--selected'); // Add checked class to the selected label
-  //      }
-  //    });
-  //  });
 </script>
