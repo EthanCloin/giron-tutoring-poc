@@ -12,7 +12,7 @@ source .venv/bin/activate
 ```
 run the app.py file via CLI using 
 ```bash 
-flask --app app init-db # *
+flask --app app init-db
 flask --app app run --debug
 ```
 *\*init-db command only needs run on intial setup, or if you want to reset the db contents*
