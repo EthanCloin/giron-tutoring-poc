@@ -118,9 +118,8 @@ def parse_iso(iso_string) -> datetime | None:
     return datetime.fromisoformat(iso_string)
 
 
-@bp.route("/", methods=["GET"])
-def get_form():
-    booking_id = request.args.get("bookingID")
+@bp.route("/<booking_id>", methods=["GET"])
+def get_form(booking_id):
     db = get_db()
     query = """
 SELECT b.BookingID,
