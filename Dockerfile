@@ -46,4 +46,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD gunicorn '.venv.lib.python3.10.site-packages.werkzeug.wsgi' --bind=0.0.0.0:8000
+CMD gunicorn --worker-tmp-dir '/dev/shm/giron-tutoring-poc.wsgi' '.venv.lib.python3.10.site-packages.werkzeug.wsgi' --bind=0.0.0.0:8000
