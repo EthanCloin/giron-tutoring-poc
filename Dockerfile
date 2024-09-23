@@ -15,7 +15,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
-
+COPY requirements.txt /app/requirements.txt
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
 # ARG UID=10001
@@ -44,4 +44,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD gunicorn --worker-tmp-dir '/dev/shm/giron-tutoring-poc.wsgi' '.venv.lib.python3.10.site-packages.werkzeug.wsgi' --bind=0.0.0.0:8000
+CMD gunicorn 'venv.lib.python3.10.site-packages.werkzeug.wsgi' --bind=0.0.0.0:8000
