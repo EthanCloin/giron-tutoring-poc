@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    ports:
+      - 8080:8000
+    develop: 
+      watch:
+        - action: sync
+          path: ./src/app
+          target: /src/app
+
