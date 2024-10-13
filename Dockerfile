@@ -1,17 +1,22 @@
 FROM python:3.10.0
+WORKDIR /
+ENV CONTAINER_APP_DIR=/src/app
 
-COPY ./requirements.txt app/requirements.txt
-WORKDIR app
+COPY ./src/requirements.txt $CONTAINER_APP_DIR/requirements.txt
+COPY ./src/app/templates $CONTAINER_APP_DIR/templates
+COPY ./src/app/static $CONTAINER_APP_DIR/static
+COPY ./src/app/*.py $CONTAINER_APP_DIR 
+COPY ./src/gunicorn_config.py /src
+
+WORKDIR $CONTAINER_APP_DIR 
 
 RUN pip install -r requirements.txt
-
-COPY ./app/templates /app
-COPY ./app/static /app
-COPY ./app/*.py /app
 
 # TODO: consider some database setup script running here
 
 EXPOSE 8000
 
-CMD ["gunicorn","--config", "gunicorn_config.py", "__init__:create_app()"]
+WORKDIR ../
+
+CMD ["gunicorn","--config", "gunicorn_config.py", "app:create_app()"]
 
