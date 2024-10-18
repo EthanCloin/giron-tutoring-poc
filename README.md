@@ -8,7 +8,7 @@ The project is configured to use Docker Compose as a development environment.
 
 [Download and Install Docker Desktop](https://www.docker.com/)
 
-With Docker Desktop running, you can simply run
+With Docker Desktop running, you can simply navigate to the project root and run
 ```bash
 docker compose up
 ```
