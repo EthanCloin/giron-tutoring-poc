@@ -1,42 +1,47 @@
 # Summary
 
-webapp for booking an appointment with a tutor.
-built primarily using HTMX and Python.
+Webapp for booking an appointment with a tutor.
+Built with Flask, HTMX, Docker, and SQLite.
 
+## Quickstart
+The project is configured to use Docker Compose as a development environment.
 
-## Quickstart (MacOS)
-1. Create and activate a virtual environment in the root directory using `venv`
+[Download and Install Docker Desktop](https://www.docker.com/)
+
+With Docker Desktop running, you can simply run
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+docker compose up
 ```
-run the app.py file via CLI using 
-```bash 
-flask --app app init-db
-flask --app app run --debug
+This command will direct Docker to follow instructions defined in `compose.yml` to build and run the app container. 
+
+You can find the proejct running on localhost at port 8080 on your local machine, as dictated by the 'ports' section in the app block of compose.yml.
+
+Compose will also support watching: any changes in the src/app directory will trigger a rebuild of the container. 
+
+If for whatever reason you don't want to use compose, you can build and run the container directly from the Dockerfile:
+```bash
+docker build -t <image-tagname> .
+docker run -it --rm -p 8080:8000 <image-tagname>
 ```
-*\*init-db command only needs run on intial setup, or if you want to reset the db contents*
 
+The latest official image can be found in the [public Docker Hub Repository](https://hub.docker.com/repository/docker/ethancloin/booking-app/general)
 
-## Project State
-refer to the repository Issues 
+# Open Source Tools
+## [HTMX](https://htmx.org)
+Lightweight framework for building hypermedia-driven applications.
 
-current goal is to upgrade this to look prettier, utilize HTMX more effectively, Dockerize and deploy on fly.io
+Extends HTML by adding attributes which send AJAX requests like `hx-get` or `hx-post`
 
+Supports DOM manipulation by replacing the `hx-target` element with the HTML response
 
-## Smart Calendar opensource webcomponent
-this was the fastest way for me to get a calendar element on the page. may refactor to use something
-different because it's rather annoying to work with. consider doing a Calendly integration too
+## [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+Python micro-framework which supports API routing logic via decorators and HTML template rendering with the Jinja engine. 
 
-# Reference
-## HTMX
-- https://htmx.org
-
-## flask docs
 - https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 - https://jinja.palletsprojects.com/en/3.0.x/templates/
-- 
-## time stuff
+
+# Research
+## Time Zones and Standards
 - https://agileappscloud.info/aawiki/UTC_Format
 - https://www.worldtimebuddy.com/est-to-utc-converter
 
@@ -49,6 +54,7 @@ different because it's rather annoying to work with. consider doing a Calendly i
 | Thursday  | 4      |
 | Friday    | 5      |
 | Saturday  | 6      |
-## calendar stuff
+
+## Calendar Formats
 - https://en.wikipedia.org/wiki/ICalendar
 - https://www.htmlelements.com/docs/calendar-api
